@@ -44,10 +44,11 @@ import character_creation
 #player character class
 class PlayerCharacter:
 
-    def __init__(self):
+    def __init__(self, f_table):
         #demographics
         self.object_id = uuid.uuid1()
-        self.table = None   #set by tabletop.py put_on_table()
+        self.table = f_table   #set by tabletop.py put_on_table()
+        self.table.put_on_table(self)
 
         self.first_name = "NewGuy"
         self.middle_name = ""
@@ -60,30 +61,30 @@ class PlayerCharacter:
 
 
         #add attributes from species
-        self.species = species.species_list["human"]
+        self.species = self.table.species["human"]
         self.languages = self.species.native_languages
         self.item_slots = self.species.item_slots
 
 
         #abilities
         self.ability_scores = {}
-        for each_ability in abilities.core_abilities.values():         #set each score to its minumum
+        for each_ability in self.table.abilities.values():         #set each score to its minumum
             self.ability_scores[each_ability.id] = character_creation.min_ability_score
 
         #skill bases (sum of two linked abilities)
         self.skill_bases = {}
-        for each_skill in skills.core_skills.values():                #set each skill to the sum of its two linked abilities
+        for each_skill in self.table.skills.values():                #set each skill to the sum of its two linked abilities
             self.skill_bases[each_skill.id] = (self.ability_scores[each_skill.main_ability.id] + 
                                              self.ability_scores[each_skill.secondary_ability.id])
 
         #skill ranks (points added to skills at character chreation and level up)
         self.skill_ranks = {}
-        for each_skill in skills.core_skills.values():
+        for each_skill in self.table.skills.values():
             self.skill_ranks[each_skill.id] = 0
 
         #skill totals (sum of skill bases and skill ranks)
         self.skills = {}
-        for each_skill in skills.core_skills.values():
+        for each_skill in self.table.skills.values():
             self.skills[each_skill.id] = self.skill_bases[each_skill.id] + self.skill_ranks[each_skill.id]
 
         #combat stats
@@ -126,7 +127,7 @@ class PlayerCharacter:
 
         #abilities
         for each_ability in self.ability_scores:
-            ability_string = str(str(abilities.core_abilities[each_ability].name) +
+            ability_string = str(str(self.table.abilities[each_ability].name) +
                                  ":\t" + str(self.ability_scores[each_ability]))
             ability_label = tkinter.Label(frame, text = ability_string)
             ability_label.pack()
@@ -153,7 +154,7 @@ class PlayerCharacter:
     #update ability scores
     def update_ability_scores(self, fnew_ability_scores):
         i = 0
-        for each_ability in abilities.core_abilities.values():
+        for each_ability in self.table.abilities.values():
             self.ability_scores[each_ability.id] += fnew_ability_scores[i]
             i += 1
 
@@ -171,7 +172,7 @@ class PlayerCharacter:
     #update skill ranks
     def update_skill_ranks(self, f_new_ranks):
         i = 0
-        for each_skill in skills.core_skills.values():
+        for each_skill in self.table.skills.values():
             self.skill_ranks[each_skill.id] += f_new_ranks[i]
             i += 1
         #update skills
@@ -180,7 +181,7 @@ class PlayerCharacter:
 
     #refresh skill bases, used if ability scores are changed
     def refresh_skill_bases(self):
-        for each_skill in skills.core_skills.values():
+        for each_skill in self.table.skills.values():
             self.skill_bases[each_skill.id] = (self.ability_scores[each_skill.main_ability.id] + 
                                              self.ability_scores[each_skill.secondary_ability.id])
         #update skill totals
@@ -189,7 +190,7 @@ class PlayerCharacter:
 
     #refresh skill totals, used if ability scores, skill bases, or skill ranks are changed 
     def refresh_skills(self):
-        for each_skill in skills.core_skills.values():
+        for each_skill in self.table.skills.values():
             self.skills[each_skill.id] = self.skill_bases[each_skill.id] + self.skill_ranks[each_skill.id]
     #end skill refresh
 

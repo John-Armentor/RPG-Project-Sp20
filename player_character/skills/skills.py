@@ -19,8 +19,8 @@ class Skill:
     def __init__(self, f_id, f_name, f_main_ability, f_secondary_ability, f_category, f_specialty = ""):
         self.id = f_id
         self.name = f_name
-        self.main_ability = abilities.core_abilities[f_main_ability]
-        self.secondary_ability = abilities.core_abilities[f_secondary_ability]
+        self.main_ability = abilities.default_abilities[f_main_ability]
+        self.secondary_ability = abilities.default_abilities[f_secondary_ability]
         self.category = f_category
         self.specialty = f_specialty
     #end initializer
@@ -41,14 +41,14 @@ class Skill:
 
 
 #load skills from game configuration file
-core_skills = {}
+default_skills = {}
 for each_line in skills_config:
     skill_data = str(each_line.replace("\n", "")).split(", ")
     skill_traits = []
     for each_item in skill_data:
         skill_traits.append(each_item)
     this_skill = Skill(*skill_traits)
-    core_skills[this_skill.id] = this_skill
+    default_skills[this_skill.id] = this_skill
 #end load
 
 """

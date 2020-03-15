@@ -27,7 +27,7 @@ class species:
 #end species definition
 
 #list of all species
-species_list = {}
+default_species_list = {}
 
 #list of all languages
 languages = {"vernacular": "vernacular"}
@@ -58,6 +58,6 @@ human.item_slots["legs"] = None
 
 human.native_languages.append(languages["vernacular"])
 
-species_list["human"] = human
+default_species_list["human"] = human
 #end human
 

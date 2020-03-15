@@ -22,6 +22,13 @@ class User:
         self.ip_address = socket.gethostbyname(socket.gethostname())
         self.is_gamemaster = f_is_gamemaster
 
+        #create dependancies for chat message object
+        #   required for chat messages spoken by gm
+        if f_is_gamemaster:
+            self.name = "Gamemaster"
+            self.first_name = "Gamemaster"
+            self.last_name = "Gamemaster"
+
         self.character = []
         if (f_character != None):
             self.character.append(f_character)
