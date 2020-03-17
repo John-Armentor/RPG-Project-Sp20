@@ -12,6 +12,7 @@ sys.path.append('./story_items')
 sys.path.append('./netcode')
 
 import player_character
+import character_sheet
 import character_creation
 import abilities
 import skills
@@ -60,6 +61,7 @@ instructions = ("\n\nsandbox commands:\n" +
                 #"AAAAAH!:\trun every command\n" +
 
                 "\n----- Player Character Commands -----\n" +
+                "sheet:\topen the character sheet\n" +
                 "create:\tcreate a new character with gui\n" +
                 "abils:\toutput the character's abilities\n" +
                 "skills:\toutput the character's skills\n" +
@@ -124,6 +126,12 @@ while(command != "exit"):
 
 
     ##### PC Commands #####
+
+    #tests Character Sheet GUI
+    elif (command == "sheet"):
+        print("-------------------------\n")
+        character_sheet.character_sheet(player1)
+        print("\n-------------------------\n")
 
     #tests Character Creation GUI
     elif (command == "create"):    
