@@ -81,6 +81,11 @@ def client_master_controller(current_network):
         if not client_function_queue.empty():
             next_function_to_send = client_function_queue.get()
             table1 = current_network.send(next_function_to_send)
+        else:
+            default_update_args = ("Updating", "Client...")
+            default_update_function = FunctionPackager(TestFunction, default_update_args)
+            client_function_queue.put(default_update_function)
+            time.sleep(.250)
             
 
 # the function that will be used to have a function sent to the server
