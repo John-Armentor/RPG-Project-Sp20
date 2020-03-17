@@ -46,7 +46,7 @@ def character_creation(f_character):
     ############ Abilities ############
 
     #remaining points to spend on abilities
-    ability_points_left = starting_ability_points 
+    ability_points_left = starting_ability_points        #f_character.current_ability_points
     #highest bonus to be added to ability scores
     ability_max_bonus = min(max_ability_score - min_ability_score, 
                           ability_points_left)
@@ -56,7 +56,7 @@ def character_creation(f_character):
     #   update abilites function
     ability_bonuses = {}
     for each_ability in abilities.core_abilities.values():
-        ability_bonuses[each_ability.id] = 0
+        ability_bonuses[each_ability.id] = 0    
 
     # frame to hold label and spinboxes for abilities
     ability_frame = tkinter.LabelFrame(character_creation_window, text = "Abilities",
@@ -75,14 +75,15 @@ def character_creation(f_character):
     #   updates the bonuses with new value from the spinbox
     def ability_spinbox_update():
         #update ability bonuses based off values in the spinboxes
+        # Takes into account starting values of 5
         for each_ability in abilities.core_abilities.values():
-            ability_bonuses[each_ability.id] = int(ability_bonus_spinboxes[each_ability.id].get()) 
+            ability_bonuses[each_ability.id] = (int(ability_bonus_spinboxes[each_ability.id].get())) - 5 
 
         #check how many points are left
         ability_bonus_sum = 0
         for each_ability in abilities.core_abilities.values():
-            ability_bonus_sum += ability_bonuses[each_ability.id]
-        ability_points_left = starting_ability_points - ability_bonus_sum
+            ability_bonus_sum += ability_bonuses[each_ability.id]   
+        ability_points_left = starting_ability_points - ability_bonus_sum   #f_character.current_ability_points - ability_bonus_sum
         ability_max_bonus = max_ability_score - min_ability_score 
 
         #don't let player spend more points than they have, resets spinbox max values
@@ -94,7 +95,7 @@ def character_creation(f_character):
         else:
             for each_ability in abilities.core_abilities.values():
                 ability_bonus_spinboxes[each_ability.id].config(
-                    to = min(ability_max_bonus, 
+                    to = min(max_ability_score,                     # Was: ability_max_bonus
                              int(ability_bonus_spinboxes[each_ability.id].get()) + 
                              ability_points_left))
 
@@ -107,8 +108,8 @@ def character_creation(f_character):
     ability_bonus_spinboxes = {}
     for each_ability in abilities.core_abilities.values():
         label = tkinter.Label(ability_frame, text = each_ability.name + ":").pack() 
-        ability_bonus_spinboxes[each_ability.id] = tkinter.Spinbox(
-            ability_frame, from_ = 0, to = ability_max_bonus,   #0, ability_max_bonus
+        ability_bonus_spinboxes[each_ability.id] = tkinter.Spinbox(             # f_character.ability_scores[each_ability.id]
+            ability_frame, from_ = min_ability_score, to = max_ability_score,   #Was: 0, ability_max_bonus
             command = ability_spinbox_update)
         ability_bonus_spinboxes[each_ability.id].pack()
     #
@@ -242,4 +243,5 @@ def character_creation(f_character):
         new_skill_ranks.append(skill_bonuses[each_skill.id])
     f_character.update_skill_ranks(new_skill_ranks)
 
+    f_character.current_ability_points = ability_points_left
 #end character creation function
