@@ -30,14 +30,25 @@ def character_sheet(f_character):
     # Uses the player_character.py build_frame func to display the character info
     # Includes name, description, and ability values 
     player_info_frame = f_character.build_frame(character_sheet_window)
-    player_info_frame.grid(row = 0, column = 0, sticky = tkinter.N)
+    player_info_frame.grid(row = 0, column = 0, sticky = tkinter.N, padx = 5, pady = 5)
 
     # Displays the character's current skill values
 
 
 
     # Displays the character's current hitpoints
+    hitpoint_frame = tkinter.LabelFrame(character_sheet_window, text = "Hitpoints", 
+                                        labelanchor = tkinter.N)
+    hitpoint_frame.grid(row = 0, column = 1, sticky = tkinter.N, padx = 5, pady = 5)
 
+    for each_hitbox in f_character.max_hitpoints:  
+            hitpoint_string = (str(each_hitbox) + ": " +
+                               str(f_character.current_hitpoints[each_hitbox]) +
+                               "/" +
+                               str(f_character.max_hitpoints[each_hitbox]) )
+            
+            hitpoint_label = tkinter.Label(hitpoint_frame, text = hitpoint_string)
+            hitpoint_label.pack()
 
 
     # Displays the character's currently wielded items
