@@ -52,7 +52,15 @@ def character_sheet(f_character):
 
 
     # Displays the character's currently wielded items
+    wielded_item_frame = tkinter.LabelFrame(character_sheet_window, text = "Wielded Items",
+                                            labelanchor = tkinter.N)
+    wielded_item_frame.grid(row = 0, column = 2, sticky = tkinter.N, padx = 5, pady = 5)
 
+    for each_item in f_character.item_slots:
+            item_string = (str(each_item) + ":\t" + str(f_character.item_slots[each_item]))
+
+            item_label = tkinter.Label(wielded_item_frame, text = item_string)
+            item_label.pack()
 
 
     # Button to enable the player to view their inventory
