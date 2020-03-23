@@ -5,6 +5,7 @@
 #Prof.:     Dr. A. Louise Perkins
 
 import player_character
+import character_creation
 import tkinter
 import sys
 sys.path.append('./player_character/abilities')
@@ -80,11 +81,17 @@ def character_sheet(f_character):
     # Button to enable the player to view their inventory
     inventory_button = tkinter.Button(character_sheet_window, text = "Inventory",
                                       command = view_inventory)
-    inventory_button.grid(row = 1, column = 1)
+    inventory_button.grid(row = 1, column = 1, padx = 10, pady = 10)
 
+
+    # Function for character creation button, opens the character creation window
+    def enter_character_creation():
+        character_creation.character_creation(f_character)
 
     # Button to enable the player to create a character
-
+    character_creation_button = tkinter.Button(character_sheet_window, text = "Create a Character",
+                                               command = enter_character_creation)
+    character_creation_button.grid(row = 2, column = 1, padx = 10, pady = 10)
 
 
 
