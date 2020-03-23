@@ -63,8 +63,24 @@ def character_sheet(f_character):
             item_label.pack()
 
 
-    # Button to enable the player to view their inventory
+    # Function for inventory button, opens a window that displays the player's current inventory
+    def view_inventory():
+        inventory_window = tkinter.Tk()           
+        inventory_window.title("Inventory")
 
+        for each_item in player1.item_slots:
+            inventory_string = (str(each_item) + ":\t" + str(f_character.item_slots[each_item]))
+
+            inventory_label = tkinter.Label(inventory_window, text = inventory_string)
+            inventory_label.pack()
+
+        view_inventory.mainLoop()
+        # End inventory window
+
+    # Button to enable the player to view their inventory
+    inventory_button = tkinter.Button(character_sheet_window, text = "Inventory",
+                                      command = view_inventory)
+    inventory_button.grid(row = 1, column = 1)
 
 
     # Button to enable the player to create a character
