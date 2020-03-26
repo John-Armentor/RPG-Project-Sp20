@@ -1,0 +1,4 @@
+name: healing potion
+description: This small vial contains a viscous green slude and is plugged with a cork stopper.
+actions: drink_healing_potion
+subitems: 

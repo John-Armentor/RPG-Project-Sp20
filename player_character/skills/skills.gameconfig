@@ -1,0 +1,57 @@
+athletics, Athletics, strength, dexterity, standard
+boating, Boating, strength, constitution, standard
+brawn, Brawn, strength, size, standard
+conceal, Conceal, dexterity, soul, standard
+customs, Customs, intelligence, intelligence, standard
+dance, Dance, dexterity, constitution, standard
+deceit, Deceit, intelligence, constitution, standard
+drive, Drive, dexterity, soul, standard
+endurance, Endurance, constitution, constitution, standard
+evade, Evade, dexterity, dexterity, standard
+first_aid, First Aid, dexterity, intelligence, standard
+influence, Influence, charisma, charisma, standard
+insight, Insight, intelligence, soul, standard
+locale, Locale, intelligence, intelligence, standard
+native_tongue, Native Tongue, intelligence, charisma, standard
+perception, Perception, intelligence, soul, standard
+ride, Ride, dexterity, soul, standard
+sing, Sing, soul, charisma, standard
+stealth, Stealth, dexterity, intelligence, standard
+swim, Swim, strength, constitution, standard
+willpower, Willpower, soul, soul, standard
+acting, Acting, charisma, charisma, professional
+acrobatics, Acrobatics, strength, dexterity, professional
+art, Art, soul, charisma, professional, ___
+bureaucracy, Bureaucracy, intelligence, intelligence, professional
+commerce, Commerce, intelligence, intelligence, professional
+courtesy, Courtesy, intelligence, charisma, professional
+craft, Craft, dexterity, intelligence, professional, ___
+culture, Culture, intelligence, intelligence, professional, ___
+disguise, Disguise, intelligence, charisma, professional
+engineering, Engineering, intelligence, intelligence, professional
+gambling, Gambling, intelligence, soul, professional
+healing, Healing, intelligence, soul, professional
+language, Language, intelligence, charisma, professional, ___
+literacy, Literacy, intelligence, intelligence, professional, ___
+lockpicking, Lockpicking, dexterity, dexterity, professional
+lore, Lore, intelligence, intelligence, professional, ___
+mechanisms, Mechanisms, dexterity, intelligence, professional
+musicianship, Musicianship, dexterity, charisma, professional
+navigation, Navigation, intelligence, soul, professional
+oratory, Oratory, soul, charisma, professional
+seamanship, Seamanship, intelligence, constitution, professional
+sleight, Sleight, dexterity, charisma, professional
+streetwise, Streetwise, soul, charisma, professional
+survival, Survival, constitution, soul, professional
+teach, Teach, intelligence, charisma, professional
+track, Track, intelligence, constitution, professional
+unarmed, Unarmed, strength, dexterity, combat
+binding, Binding, soul, charisma, magic
+devotion, Devotion, soul, charisma, magic
+exhort, Exhort, intelligence, charisma, magic
+folk_magic, Folk Magic, soul, charisma, magic
+invocation, Invocation, intelligence, intelligence, magic
+meditation, Meditation, intelligence, constitution, magic
+mysticism, Mysticism, soul, constitution, magic
+shaping, Shaping, intelligence, soul, magic
+trance, Trance, soul, constitution, magic
