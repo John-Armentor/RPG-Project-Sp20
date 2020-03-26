@@ -34,8 +34,31 @@ def character_sheet(f_character):
     player_info_frame.grid(row = 0, column = 0, sticky = tkinter.N, padx = 5, pady = 5)
 
     # Displays the character's current skill values
+    # Multiple frames and canvas used to make a scrollable list 
+    def onFrameConfigure(canvas):
+        canvas.configure(scrollregion=canvas.bbox("all"))
 
+    outer_skill_frame = tkinter.LabelFrame(character_sheet_window, text = "Skills",
+                                           labelanchor = tkinter.N)
+    skill_canvas = tkinter.Canvas(outer_skill_frame)
+    skill_frame = tkinter.Frame(skill_canvas)
+    skill_scrollbar = tkinter.Scrollbar(outer_skill_frame, orient = tkinter.VERTICAL,
+                                        command = skill_canvas.yview)
+    skill_canvas.configure(yscrollcommand = skill_scrollbar.set)
 
+    outer_skill_frame.grid(row = 1, column = 0, pady = 10, rowspan = 2, sticky = tkinter.N + tkinter.S)
+    skill_canvas.grid(row = 0, column = 0, padx = 10, rowspan = 2,
+                      sticky = tkinter.N + tkinter.S)
+    skill_scrollbar.grid(row = 0, column = 1, sticky = tkinter.NW + tkinter.SW, pady = 10,
+                         rowspan = 2)
+    skill_canvas.create_window((0,0), window = skill_frame, anchor = tkinter.N)
+    skill_canvas.bind("<Configure>", lambda event, canvas=skill_canvas: onFrameConfigure(skill_canvas))
+
+    for each_skill in skills.core_skills.values():
+            skill_string = (str(each_skill.name)+":\t" + str(f_character.skills[each_skill.id]))
+
+            skill_label = tkinter.Label(skill_frame, text = skill_string)
+            skill_label.pack()
 
     # Displays the character's current hitpoints
     hitpoint_frame = tkinter.LabelFrame(character_sheet_window, text = "Hitpoints", 
@@ -69,7 +92,7 @@ def character_sheet(f_character):
         inventory_window = tkinter.Tk()           
         inventory_window.title("Inventory")
 
-        for each_item in player1.item_slots:
+        for each_item in f_character.item_slots:
             inventory_string = (str(each_item) + ":\t" + str(f_character.item_slots[each_item]))
 
             inventory_label = tkinter.Label(inventory_window, text = inventory_string)
@@ -81,7 +104,7 @@ def character_sheet(f_character):
     # Button to enable the player to view their inventory
     inventory_button = tkinter.Button(character_sheet_window, text = "Inventory",
                                       command = view_inventory)
-    inventory_button.grid(row = 1, column = 1, padx = 10, pady = 10)
+    inventory_button.grid(row = 1, column = 2, padx = 10, pady = 10)
 
 
     # Function for character creation button, opens the character creation window
@@ -91,7 +114,7 @@ def character_sheet(f_character):
     # Button to enable the player to create a character
     character_creation_button = tkinter.Button(character_sheet_window, text = "Create a Character",
                                                command = enter_character_creation)
-    character_creation_button.grid(row = 2, column = 1, padx = 10, pady = 10)
+    character_creation_button.grid(row = 2, column = 2, padx = 10, pady = 10)
 
 
 
