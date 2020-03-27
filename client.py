@@ -72,17 +72,39 @@ def main():
         print("Server Launching...")
         time.sleep(3)
         
+        conn = rpyc.classic.connect(HOSTIP)
+        hostspace = conn.namespace
+        
         print("Initializing Table...")
-        campaign_title = "The Chronicles of Testing"
-        gm1 = user.User(True)
-        host_table = tabletop.Tabletop(gm1, campaign_title)
-    
-    conn = rpyc.classic.connect(HOSTIP)
-    hostspace = conn.modules.sys
+        
+        conn.execute("import sys")
+        conn.execute("sys.path.append('./game_engine')")
 
+        conn.execute("import user")
+        conn.execute("import tabletop")
+        
+        
+        conn.execute("campaign_title = 'The Chronicles of Testing'")
+        conn.execute("gm1 = user.User(True)")
+        conn.execute("host_table = tabletop.Tabletop(gm1, campaign_title)")
+        
+        conn.execute("host_table.print_object_ids()")
+    
+    else: 
+        conn = rpyc.classic.connect(HOSTIP)
+        hostspace = conn.namespace
+
+    host_table = hostspace["host_table"]
+    
+    client_user = user.User()
+    host_table.put_on_table(client_user)
+
+    
     # Main Game Loop
     #
     while run:
+        conn.execute("print('=================================================')")
+        host_table.print_object_ids()
         words = input("Say something...")
         
 main()
