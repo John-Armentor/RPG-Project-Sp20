@@ -130,7 +130,7 @@ while(command != "exit"):
     #tests Character Sheet GUI
     elif (command == "sheet"):
         print("-------------------------\n")
-        character_sheet.character_sheet(player1)
+        character_sheet.character_sheet(table1.player_characters[user1.active_character.object_id])
         print("\n-------------------------\n")
 
     #tests Character Creation GUI
