@@ -61,10 +61,6 @@ def setIP():
 #
 def main():
     
-    # Set run to true to keep the game looping
-    #
-    run = True
-    
     setIP()
     
     if ISHOST:
@@ -87,8 +83,6 @@ def main():
         conn.execute("campaign_title = 'The Chronicles of Testing'")
         conn.execute("gm1 = user.User(True)")
         conn.execute("host_table = tabletop.Tabletop(gm1, campaign_title)")
-        
-        conn.execute("host_table.print_object_ids()")
     
     else: 
         conn = rpyc.classic.connect(HOSTIP)
@@ -98,17 +92,8 @@ def main():
     
     client_user = user.User(False, player_character.PlayerCharacter(host_table))
     host_table.put_on_table(client_user)
-
-    
-    # Main Game Loop
-    #
-    while run:
-        conn.execute("print('=================================================')")
-        host_table.print_object_ids()
-        
-        main_window = main_menu.MainMenu(host_table, client_user)
-        main_window.mainloop()
-        
-        #words = input("Say something...")
+            
+    main_window = main_menu.MainMenu(host_table, client_user)
+    main_window.mainloop()
         
 main()
