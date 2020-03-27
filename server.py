@@ -3,7 +3,7 @@
 #Date:      2020 01 30
 #Modified:      2020 02 10
 #Course:    CSC424 - Software Engineering II
-#Modified:      2020 03 05
+#Modified:      2020 03 09
 #Course:    CSC425 - Software Engineering II
 #Prof:      Dr. A. Louise Perkins
 
@@ -39,8 +39,7 @@ import socket
 import pickle
 import multiprocessing
 from _thread import *
-from network import Network
-from settings import *
+from network import *
 import time
 
 # queue of functions that are incoming from players and applying to the current game table
@@ -49,12 +48,10 @@ master_function_queue = multiprocessing.Queue()
 
 # we initialize a game table and GM serverside
 #
-gm1 = user.User()
-gm1.is_gamemaster = True
-gm1.active_character = player_character.PlayerCharacter()
-gm1.active_character.name = "Gamemaster"
-                
-table1 = tabletop.Tabletop(gm1)
+campaign_title = "The Chronicles of Testing"
+gm1 = user.User(True)
+table1 = tabletop.Tabletop(gm1, campaign_title)
+user1 = user.User(False, player_character.PlayerCharacter(table1))
 
 # the test function from client to demonstrate we can pass functions from client to server and 
 # execute them here
@@ -79,7 +76,7 @@ def threaded_client(connection):
             
             # we attempt to recieve 2048 bits of data that was pickled and we can increase the size of the data using the multiplier
             #
-            inbound_data = pickle.loads(connection.recv(1024*4))
+            inbound_data = pickle.loads(connection.recv(1024*MEMORYMULTIPLIER))
             print("Incoming: ", inbound_data)
             
             # we place the recieved fucntion in the master queue
@@ -110,7 +107,7 @@ def threaded_client(connection):
 # this thread acts as our master thread for the server which will be the main game loop
 # running on the server and process the master function queue onto the game table
 #
-def master_controller(x):
+def server_master_controller():
     global master_function_queue
     global table1
     
@@ -121,11 +118,11 @@ def master_controller(x):
 
 # we initialize our master controller thread
 #
-start_new_thread(master_controller,(1,))
+start_new_thread(server_master_controller,())
 
 # We set a variable for the server the same as our local host setting in out settings.py file
 #
-server = LOCALHOST
+server = socket.gethostbyname(socket.gethostname())
 
 # We set the port to 5555 as it is in a commonly unused port range to avoid the commonly used ones
 #

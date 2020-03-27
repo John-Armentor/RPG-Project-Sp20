@@ -26,7 +26,11 @@ class ChatMessage:
         self.object_id = uuid.uuid1()
         self.table = None   #set by tabletop.py put_on_table()
 
-        self.speaker = f_speaker #character, not user. whole object, not just name
+        #speaker is a PlayerCharacter object for player users
+        #   is a User object for gamemaster
+        #   in both cases speaker is the whole object, not just the name
+        #   this is to allow access to the speakers object_id if needed
+        self.speaker = f_speaker
 
         self.type = f_type
         self.visibility = f_visibility

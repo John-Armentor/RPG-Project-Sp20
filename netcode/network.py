@@ -12,15 +12,15 @@
 
 import socket
 import pickle
-from settings import *
+#from client import ISHOST, LOCALHOST
 
+MEMORYMULTIPLIER = 10
 
 # The class we initialize to interact with the server
 #
 class Network:
-    def __init__(self):
+    def __init__(self, f_localhost):
     
-        # We establish a socket with the type of connection will will be using.
         # We establish a socket with the type of connection will will be using.
         # AF_INET showing that we are using IPv4 and SOCK_STREAM showing
         # it is a TCP socket
@@ -29,7 +29,7 @@ class Network:
         
         # The server IP we will pull from our settings.py file
         #
-        self.server = LOCALHOST
+        self.server = f_localhost
         
         # a good, typically open port, but can be changed as needed
         #
@@ -53,7 +53,7 @@ class Network:
     def connect(self):
         try:
             self.client.connect(self.address)
-            return pickle.loads(self.client.recv(1024*4))
+            return pickle.loads(self.client.recv(1024*MEMORYMULTIPLIER))
         except:
             pass
 
@@ -62,6 +62,6 @@ class Network:
     def send(self, data):
         try:
             self.client.send(pickle.dumps(data))
-            return pickle.loads(self.client.recv(1024*4))
+            return pickle.loads(self.client.recv(1024*MEMORYMULTIPLIER))
         except socket.error:
             print(socket.error)

@@ -54,7 +54,7 @@ def character_sheet(f_character):
     skill_canvas.create_window((0,0), window = skill_frame, anchor = tkinter.N)
     skill_canvas.bind("<Configure>", lambda event, canvas=skill_canvas: onFrameConfigure(skill_canvas))
 
-    for each_skill in skills.core_skills.values():
+    for each_skill in f_character.table.skills.values():
             skill_string = (str(each_skill.name)+":\t" + str(f_character.skills[each_skill.id]))
 
             skill_label = tkinter.Label(skill_frame, text = skill_string)

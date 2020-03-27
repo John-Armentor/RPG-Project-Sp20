@@ -32,11 +32,11 @@ class Ability:
 
 
 #load skills from game configuration file
-core_abilities = {}
+default_abilities = {}
 for each_line in ability_config:
     ability_data = str(each_line.replace("\n", "")).split(", ")
     this_ability = Ability(ability_data[0], ability_data[1], ability_data[2])
-    core_abilities[this_ability.id] = this_ability
+    default_abilities[this_ability.id] = this_ability
 #end load
 
 
