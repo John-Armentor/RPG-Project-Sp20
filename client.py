@@ -96,7 +96,7 @@ def main():
 
     host_table = hostspace["host_table"]
     
-    client_user = user.User()
+    client_user = user.User(False, player_character.PlayerCharacter(host_table))
     host_table.put_on_table(client_user)
 
     
@@ -105,6 +105,10 @@ def main():
     while run:
         conn.execute("print('=================================================')")
         host_table.print_object_ids()
-        words = input("Say something...")
+        
+        main_window = main_menu.MainMenu(host_table, client_user)
+        main_window.mainloop()
+        
+        #words = input("Say something...")
         
 main()
