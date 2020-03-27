@@ -15,7 +15,7 @@ import skills
 #ability score parameters
 min_ability_score = 5                     #minimum score, starting score at initialization
 starting_ability_points_per_score = 10      #this number defines the average points per score at character creation
-starting_ability_points = starting_ability_points_per_score * len(abilities.core_abilities)  #total of above
+starting_ability_points = starting_ability_points_per_score * len(abilities.default_abilities)  #total of above
 max_ability_score = 20                    #maximum ability score bonus at character creation
 
 
