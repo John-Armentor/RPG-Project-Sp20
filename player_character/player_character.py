@@ -71,6 +71,10 @@ class PlayerCharacter:
         for each_ability in self.table.abilities.values():         #set each score to its minumum
             self.ability_scores[each_ability.id] = character_creation.min_ability_score
 
+        # Used to keep track of allocatable ability points
+        #starting_ability_points_per_score = 10
+        #self.current_ability_points = starting_ability_points_per_score * len(abilities.core_abilities)
+
         #skill bases (sum of two linked abilities)
         self.skill_bases = {}
         for each_skill in self.table.skills.values():                #set each skill to the sum of its two linked abilities
