@@ -69,7 +69,6 @@ def main():
         time.sleep(3)
         
         conn = rpyc.classic.connect(HOSTIP)
-        hostspace = conn.namespace
         
         print("Initializing Table...")
         
@@ -79,16 +78,14 @@ def main():
         conn.execute("import user")
         conn.execute("import tabletop")
         
-        
-        conn.execute("campaign_title = 'The Chronicles of Testing'")
-        conn.execute("gm1 = user.User(True)")
-        conn.execute("host_table = tabletop.Tabletop(gm1, campaign_title)")
+        campaign_title = 'The Chronicles of Testing'
+        gm1 = user.User(True)
+        conn.modules.__main__.host_table = tabletop.Tabletop(gm1, campaign_title)
     
     else: 
         conn = rpyc.classic.connect(HOSTIP)
-        hostspace = conn.namespace
 
-    host_table = hostspace["host_table"]
+    host_table = conn.modules.__main__.host_table
     
     client_user = user.User(False, player_character.PlayerCharacter(host_table))
     host_table.put_on_table(client_user)
