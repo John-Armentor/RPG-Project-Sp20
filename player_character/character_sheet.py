@@ -87,7 +87,7 @@ def character_sheet(f_character):
             item_label.pack()
 
 
-    # Function for inventory button, opens a window that displays the player's current inventory
+    # Function for inventory_button, opens a window that displays the player's current inventory
     def view_inventory():
         inventory_window = tkinter.Tk()           
         inventory_window.title("Inventory")
