@@ -92,7 +92,8 @@ def main():
     
     client_user = user.User(False, player_character.PlayerCharacter(host_table))
     host_table.put_on_table(client_user)
-            
+        
+    
     main_window = main_menu.MainMenu(host_table, client_user)
     main_window.mainloop()
         
