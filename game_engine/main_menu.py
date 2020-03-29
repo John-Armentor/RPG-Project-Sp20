@@ -19,6 +19,8 @@ sys.path.append('./story_items')
 import player_character
 import abilities
 import skills
+import character_sheet
+import character_creation
 import game_item
 import game_item_actions
 import tabletop
@@ -46,7 +48,7 @@ class MainMenu(tkinter.Tk):
         ##### CHAT ##### 
         #build frame
         self.chatlog_frame = tkinter.LabelFrame(self, text = "Chatlog:", padx = 5, pady = 5)
-        self.chatlog_frame.grid(row = 0, column = 0, rowspan = 2)
+        self.chatlog_frame.grid(row = 0, column = 0)
         self.refresh_chatlog() #keep up to date
 
         for each_message in self.tabletop.chatlog.values():
@@ -57,11 +59,11 @@ class MainMenu(tkinter.Tk):
 
         #text entry to create chat message
         self.chat_entry = tkinter.Entry(self)     #text entry field
-        self.chat_entry.grid(row = 0, column = 1)
+        self.chat_entry.grid(row = 1, column = 0)
 
 
         self.chat_submit = tkinter.Button(self, text = "Send", command = self.send_chat_message)
-        self.chat_submit.grid(row = 1, column = 1)
+        self.chat_submit.grid(row = 2, column = 0)
         #end text entry chat message
 
         ##### END CHAT #####
@@ -71,7 +73,7 @@ class MainMenu(tkinter.Tk):
         ##### STORYLOG ##### 
         #build frame
         self.storylog_frame = tkinter.LabelFrame(self, text = "Storylog:", padx = 5, pady = 5)
-        self.storylog_frame.grid(row = 0, column = 2, rowspan = 2)
+        self.storylog_frame.grid(row = 0, column = 1, rowspan = 3)
         #self.test_item = tkinter.Label(self.storylog_frame, text = "testing")
         #self.test_item.pack()
         self.refresh_storylog() #keep up to date
@@ -83,6 +85,7 @@ class MainMenu(tkinter.Tk):
         #end populate storylog
 
         ##### END STORYLOG #####
+
 
 
         # Following button used for presentation purposes
@@ -99,9 +102,26 @@ class MainMenu(tkinter.Tk):
         # Button to enable the player to add a predefined story item to the tabletop
         self.story_item_button = tkinter.Button(self, text = "Add a story item",
                                           command = add_story_item)
-        self.story_item_button.grid(row = 0, column = 3)
+        self.story_item_button.grid(row = 0, column = 2, padx = 10, pady = 10, 
+                                    sticky = tkinter.N)
 
         ##### END ADD STORY ITEM ##### 
+
+
+
+        ##### CHARACTER SHEET #####
+
+        # Function for character_sheet_button, opens the character sheet
+        def open_character_sheet():
+            character_sheet.character_sheet(self, self.user.active_character)
+
+        # Button to open the character sheet
+        character_sheet_button = tkinter.Button(self, text = "Open Character Sheet",
+                                                   command = open_character_sheet)
+        character_sheet_button.grid(row = 1, column = 2, padx = 10, pady = 10, 
+                                    sticky = tkinter.N)
+
+        ##### END CHARACTER SHEET #####
 
 
 
