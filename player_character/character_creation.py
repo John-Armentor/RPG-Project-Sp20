@@ -29,13 +29,13 @@ max_skill_ranks = 40              #maximux skill bonus allowed at character crea
 ###################################
 #### character creation screen ####
 ###################################
-def character_creation(f_character):
+def character_creation(parent_window, f_character):
         
     print("Character Creation:")
     print()
     
     #tkinter window for GUI character creation
-    character_creation_window = tkinter.Tk() #character creation window
+    character_creation_window = tkinter.Toplevel(parent_window) #character creation window
     character_creation_window.title("Character Creation")
 
 

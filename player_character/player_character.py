@@ -50,9 +50,9 @@ class PlayerCharacter:
         self.table = f_table   #set by tabletop.py put_on_table()
         self.table.put_on_table(self)
 
-        self.first_name = "NewGuy"
+        self.first_name = "Etrius"
         self.middle_name = ""
-        self.family_name = "McCharacter"
+        self.family_name = "Kummel"
         self.name = str(self.first_name + " " + self.family_name)
         self.title = ""
 
