@@ -154,6 +154,21 @@ class PlayerCharacter:
 
 
 
+   #update name
+    def update_name(self, f_first = "", f_last = "", f_middle = "", f_title = ""):
+        self.first_name = f_first
+        self.middle_name = f_middle
+        self.family_name = f_last
+        self.name = str(self.first_name + " " + self.family_name)
+        self.title = f_title
+        self.formal_name = str(self.title + " " + self.first_name + " " +
+                               self.middle_name + " " + self.family_name)
+    #
+
+    #update desc
+    def update_desc(self, f_desc = ""):
+        self.description = f_desc
+    #
 
     #update ability scores
     def update_ability_scores(self, fnew_ability_scores):
