@@ -44,6 +44,8 @@ users = []
 
 for each_user in table1.users.values():
     users.append(each_user)
+    #SANDBOX UPDATE: users[0] replaces user1, users[1] replaces user2
+
 
 """
 gm1 = user.User(True)
@@ -60,7 +62,9 @@ table1.put_on_table(users1)
 #users[0].active_character = users[0].character[0]
 
 
-
+#add image to Etrius
+#NOTE: action completed and table saved
+#table1.player_characters[users[0].active_character.object_id].image_filename = "./images/halbred_knight.jpg"
 
 
 
@@ -106,11 +110,13 @@ instructions = ("\n\nsandbox commands:\n" +
                 "\n----- Combat Commands -----\n" +
                 "thwack:\tattack the PC\n" +
                 "chug:\tdrink a healing potion\n" +
+                "npc:\tadd an NPC to the table\n" +
 
                 "\n----- Chatlog -----\n" +
                 "psst:\tput a chat message on the table and output to console\n" +
                 "speak:\tspeak an inputted message and place in chat log\n" + 
                 "walk:\tputs a walking action message into the chat log\n" +
+                "clearlogs:\tclear chatlog and storylog for debugging\n" +
                 "\n")
 print(instructions)
 
@@ -422,6 +428,25 @@ while(command != "exit"):
         print("\n-------------------------\n")
 
 
+    elif(command == "npc"):
+        print("-------------------------\n")
+
+        npc = player_character.PlayerCharacter(table1)
+        firstname = input("Enter first name: ")
+        lastname = input("Enter last name: ")
+        npc.update_name(firstname, lastname)
+        character_creation.character_creation(main_menu.MainMenu(table1, table1.gamemaster), npc)
+        table1.put_on_table(npc)
+
+        welcome = str(npc.name + " has entered the game.")
+        msg = chat_message.ChatMessage(table1.gamemaster, "technical", "public", welcome)
+        table1.put_on_table(msg)
+        table1.chatlog[msg.object_id].print_chat_message()
+
+
+        print("\n-------------------------\n")
+
+
 
 
 
@@ -466,6 +491,18 @@ while(command != "exit"):
 
 
         print("\n-------------------------\n")
+
+
+    #clear the chatlog and storylog, used only for debugging
+    elif (command == "clearlogs"):
+        print("-------------------------\n")
+        table1.chatlog = {}
+        table1.story_items = {}
+        print("Table logs cleared.")
+        print("\n-------------------------\n")
+
+
+
 
     #invalid command
     else:

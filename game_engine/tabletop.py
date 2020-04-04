@@ -37,7 +37,7 @@ import uuid
 class Tabletop:
     def __init__(self, f_gamemaster, f_campaign_name = "Campaign"):
         self.object_id = uuid.uuid1()
-        self.gamemaster = f_gamemaster     #stores unique identifier of game master (GM)
+        self.gamemaster = f_gamemaster     #stores user object of game master (GM)
         self.campaign_name = f_campaign_name
 
         self.users = {}

@@ -1,6 +1,6 @@
 #Author:        Dylan E. Wheeler
 #Email:         dylan.wheeler@usm.edu
-#Date:          2019 01 30
+#Date:          2020 01 30
 #Course:        CSC424 - Software Engineering II
 #Prof.:         Dr. A. Louise Perkins
 
@@ -28,6 +28,7 @@ import abilities
 sys.path.append('./player_character/skills')
 import skills
 import uuid
+from PIL import Image, ImageTk #image handling for various file types
 
 
 #list of core ability scores
@@ -55,6 +56,8 @@ class PlayerCharacter:
         self.family_name = "Kummel"
         self.name = str(self.first_name + " " + self.family_name)
         self.title = ""
+        self.formal_name = str(self.title + " " + self.first_name + " " +
+                               self.middle_name + " " + self.family_name)
 
         self.image_filename = ""       #stores a system path to a picture
         self.description = "A stunning Character."
@@ -153,6 +156,19 @@ class PlayerCharacter:
     #
 
 
+
+
+
+    #update name
+    def update_name(self, f_first = "", f_last = "", f_middle = "", f_title = ""):
+        self.first_name = f_first
+        self.middle_name = f_middle
+        self.family_name = f_last
+        self.name = str(self.first_name + " " + self.family_name)
+        self.title = f_title
+        self.formal_name = str(self.title + " " + self.first_name + " " +
+                               self.middle_name + " " + self.family_name)
+    #
 
 
     #update ability scores
