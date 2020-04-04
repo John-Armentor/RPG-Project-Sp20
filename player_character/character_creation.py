@@ -45,6 +45,35 @@ def character_creation(parent_window, f_character):
     name_and_desc_frame = tkinter.Frame(character_creation_window, height = 400)
     name_and_desc_frame.grid(row = 0, column = 0)
 
+    # Label for name instructions
+    name_label = tkinter.Label(name_and_desc_frame, 
+                               text = "Please enter the name for your character:")
+    name_label.pack()
+
+    # Entry box for name
+    name_entry = tkinter.Entry(name_and_desc_frame)
+    name_entry.pack()
+
+    # Label for description instructions
+    desc_label = tkinter.Label(name_and_desc_frame, 
+                               text = "Please enter a description for your character:")
+    desc_label.pack()
+
+    # Entry box for description
+    desc_entry = tkinter.Entry(name_and_desc_frame)
+
+    # Function to run when update_name_and_desc_button is clicked
+    # Updates the player character object's name and desc with what is in the entry boxes
+    def update_name_and_desc():
+        new_name = name_entry.get()
+        new_desc = desc_entry.get()
+
+
+    # Button for updating character with entered name and description
+    update_name_and_desc_button = tkinter.Button(name_and_desc_frame, 
+                                                 text = "Update Name and Description")
+    update_name_and_desc_button.pack()
+
     ############ Abilities ############
 
     #remaining points to spend on abilities
