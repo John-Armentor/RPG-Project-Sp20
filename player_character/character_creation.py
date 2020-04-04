@@ -45,34 +45,66 @@ def character_creation(parent_window, f_character):
     name_and_desc_frame = tkinter.Frame(character_creation_window, height = 400)
     name_and_desc_frame.grid(row = 0, column = 0)
 
-    # Label for name instructions
-    name_label = tkinter.Label(name_and_desc_frame, 
-                               text = "Please enter the name for your character:")
+    # Labels for names
+    name_label = tkinter.Label(name_and_desc_frame, text = "Character Name:")
+    first_name_label = tkinter.Label(name_and_desc_frame, text = "First Name:")
+    middle_name_label = tkinter.Label(name_and_desc_frame, text = "Middle Name:")
+    family_name_label = tkinter.Label(name_and_desc_frame, text = "Family Name:")
+    title_label = tkinter.Label(name_and_desc_frame, text = "Title:")
+ 
+    # Entry boxes for name
+    first_name_entry = tkinter.Entry(name_and_desc_frame)
+    middle_name_entry = tkinter.Entry(name_and_desc_frame)
+    family_name_entry = tkinter.Entry(name_and_desc_frame)
+    title_entry = tkinter.Entry(name_and_desc_frame)
+
+    # Packs name labels and entry boxes 
     name_label.pack()
+    first_name_label.pack()
+    first_name_entry.pack()
+    middle_name_label.pack()
+    middle_name_entry.pack()
+    family_name_label.pack()
+    family_name_entry.pack()
+    title_label.pack()
+    title_entry.pack()
 
-    # Entry box for name
-    name_entry = tkinter.Entry(name_and_desc_frame)
-    name_entry.pack()
+    # Function to run when update_name_button is clicked
+    # Sends names from entry boxes to player_character.update_name 
+    def update_name():
+        new_first = first_name_entry.get()
+        new_middle = middle_name_entry.get()
+        new_family = family_name_entry.get()
+        new_title = title_entry.get()
 
-    # Label for description instructions
-    desc_label = tkinter.Label(name_and_desc_frame, 
-                               text = "Please enter a description for your character:")
+        f_character.update_name(new_first, new_family, new_middle, new_title)
+
+    # Button for updating character with entered name 
+    update_name_button = tkinter.Button(name_and_desc_frame, 
+                                                 text = "Update Name",
+                                                 command = update_name)
+    update_name_button.pack(pady = 5)
+
+    # Label for description
+    desc_label = tkinter.Label(name_and_desc_frame, text = "Character Description:")
     desc_label.pack()
 
     # Entry box for description
     desc_entry = tkinter.Entry(name_and_desc_frame)
+    desc_entry.pack()
 
-    # Function to run when update_name_and_desc_button is clicked
-    # Updates the player character object's name and desc with what is in the entry boxes
-    def update_name_and_desc():
-        new_name = name_entry.get()
+    # Function to run when update_desc_button is clicked
+    # Sends desc from entry box to player_character.update_desc
+    def update_desc():
         new_desc = desc_entry.get()
 
+        f_character.update_desc(new_desc)
 
-    # Button for updating character with entered name and description
-    update_name_and_desc_button = tkinter.Button(name_and_desc_frame, 
-                                                 text = "Update Name and Description")
-    update_name_and_desc_button.pack()
+    # Button for updating character with entered description
+    update_desc_button = tkinter.Button(name_and_desc_frame, text = "Update Description",
+                                        command = update_desc)
+    update_desc_button.pack(pady = 5)
+
 
     ############ Abilities ############
 
