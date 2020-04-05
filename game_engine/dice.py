@@ -69,21 +69,91 @@ def roll_d(f_die_size):
 
 
 
-"""TODO: WIP
 #make opposed check
 #   both players must roll a success,
 #   if only one does then that player wins,
 #   else the player who rolls the closest to their 
 #   skill but less than their skill wins
-def opposed_check(f_p1, f_p2, f_skill1, f_skill2 = f_skill1):
+def opposed_check(f_p1, f_p2, 
+                  f_skill1 = 50, f_difficulty1 = "standard",
+                  f_skill2 = None, f_difficulty2 = None):
+    #adjust parameters
+    if f_skill2 == None:
+        f_skill2 = f_skill1
+    if f_difficulty2 == None:
+        f_difficulty2 = f_difficulty1
+
     victor = None
+    defeated = None
     
-    p1_roll = random.randrange(100)
-    p2_roll = random.randrange(100)
+    #roll dice
+    p1_roll = random.randrange(100) #produces a pseudorandom integer between 0 and 99 inclusively
+    p2_roll = random.randrange(100) #produces a pseudorandom integer between 0 and 99 inclusively
 
-    #if (p1_roll
-    
-    return victor
-"""
+    #get targets modified by any difficulty modifiers
+    p1_target = int(math.floor(float(f_skill1) * difficulty_grades[f_difficulty1])) 
+    p2_target = int(math.floor(float(f_skill2) * difficulty_grades[f_difficulty2])) 
 
+    #debugging
+    print(p1_roll)
+    print(p1_target)
+    print(p2_roll)
+    print(p2_target)
 
+    #if player 1 succeeds and player 2 fails, player 1 wins
+    if ( (p1_roll < p1_target) and (p2_roll > p2_target) ):
+        victor = f_p1
+        defeated = f_p2
+
+    #if player 2 succeeds and player 1 fails, player 2 wins
+    elif ( (p2_roll < p2_target) and (p1_roll > p1_target) ):
+        victor = f_p2
+        defeated = f_p1
+
+    #if both players succeed, the roller closest to their skill difficulty wins
+    elif ( (p1_roll < p1_target) and (p2_roll < p2_target) ):
+        p1_difference = p1_target - p1_roll
+        p2_difference = p2_target - p2_roll
+
+        #if player 1 is closest
+        if (p1_difference < p2_difference):
+            victor = f_p1
+            defeated = f_p2
+
+        #if player 2 is closest
+        elif (p2_difference < p1_difference):
+            victor = f_p2
+            defeated = f_p1
+
+        #if the differences are tied, reroll
+        else:
+           victor = opposed_check(f_p1, f_p2, f_skill1, f_skill2, f_difficulty1, f_difficulty2)
+
+    #if neither player succeeds
+    else:
+        victor = None
+        defeated = None
+
+    #
+
+    #determine levels of advantage
+    advantage = 0
+    if victor == f_p1:
+        if (p1_roll < p1_target):
+            advantage += 1
+        if (p1_roll < critical_target):
+            advantage += 1
+        if (p2_roll > fumble_target):
+            advantage += 1
+    elif victor == f_p2:
+        if (p2_roll < p2_target):
+            advantage += 1
+        if (p2_roll < critical_target):
+            advantage += 1
+        if (p1_roll > fumble_target):
+            advantage += 1
+    #
+
+    return [victor, advantage]
+
+#end opposed check
