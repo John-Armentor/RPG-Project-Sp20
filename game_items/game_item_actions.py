@@ -13,8 +13,16 @@ sys.path.append('./game_engine')
 import dice
 
 
-def attack(f_subject = None):
-    print("ATTACK!")
+def attack(f_object, f_source, f_target):
+    """
+    attack take in a weapon or other source of damage, 
+        the PC object performing the attack,
+        and the PC object being attacked.
+    """
+    print("ATTACK!") #debugging
+
+
+
 
 
 def parry(f_subject = None):
