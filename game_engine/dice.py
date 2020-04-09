@@ -63,7 +63,7 @@ def skill_check(f_character, f_skill, f_difficulty = "standard"):
 
 #roll a plain die, not related to a check,
 #   useful for damage dice
-def roll_d(f_die_size):
+def roll_d(f_die_size = 100):
     return int((random.randrange(f_die_size-1))+1) #rolls between 1 and die size, inclusively
 #end roll d_ 
 
