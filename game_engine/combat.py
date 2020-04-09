@@ -21,7 +21,7 @@ def attack_action(f_attacker, f_defender,
     if (f_attacker_weapon == "unarmed"):
         f_attacker_weapon = f_attacker.unarmed
     if (f_defender_weapon == "unarmed"):
-        f_defender_weapon = f_defender.unarmed #here would be a defenders shield if they had one.
+        f_defender_weapon = f_defender.unarmed #here would be a defender's shield if they had one.
 
 
     #attempt opposed combat skill check between attacker and defender

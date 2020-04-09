@@ -29,7 +29,7 @@ class species:
     #end initializer
 
 
-    def return_random_hitbox(self):
+    def get_random_hitbox(self):
         """
             selects a random hitbox from the species hitbox dict,
             useful for dealing damage anytime the attacker does

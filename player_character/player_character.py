@@ -114,7 +114,7 @@ class PlayerCharacter:
 
         #unarmed attack as a game_item
         self.unarmed = game_item.GameItem()
-        self.unarmed.load_item_from_file("fist.gmitm")
+        self.unarmed.load_item_from_file(open("./game_items/fist.gmitm"))
 
     #end initializer
 
