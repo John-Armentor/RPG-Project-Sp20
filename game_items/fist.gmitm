@@ -1,0 +1,4 @@
+name: fist
+description: A fist, suitable for punching.
+actions: attack
+traits: damage=1d3, range=melee, combat_type=one_handed_weapon

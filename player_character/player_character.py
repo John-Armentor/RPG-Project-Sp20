@@ -40,6 +40,8 @@ from PIL import Image, ImageTk #image handling for various file types
 
 
 import character_creation
+sys.path.append('./game_items')
+import game_item
 
 
 #player character class
@@ -109,6 +111,10 @@ class PlayerCharacter:
 
         #inventory
         self.inventory = {}
+
+        #unarmed attack as a game_item
+        self.unarmed = game_item.GameItem()
+        self.unarmed.load_item_from_file("fist.gmitm")
 
     #end initializer
 

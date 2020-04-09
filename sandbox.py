@@ -108,9 +108,10 @@ instructions = ("\n\nsandbox commands:\n" +
                 "opposed:\troll a skill check between two opposing characters\n" +
 
                 "\n----- Combat Commands -----\n" +
-                "thwack:\tattack the PC\n" +
+                "thwack:\tattack the PC (uses take_damage, not weapon_attack)\n" +
                 "chug:\tdrink a healing potion\n" +
                 "npc:\tadd an NPC to the table\n" +
+                "engage:\tuse combat.py > attack_action to roll combat between user[0] and an npc\n" + 
 
                 "\n----- Chatlog -----\n" +
                 "psst:\tput a chat message on the table and output to console\n" +
