@@ -31,6 +31,7 @@ class GameItem():
         self.image_filename = ""       #stores a system path to a picture
         self.actions = {}
         self.subitems = []
+        self.traits = {}    #characteristics such as damage for weapons, color, etc
     #end initializer
 
 
@@ -40,19 +41,28 @@ class GameItem():
         print("Game Item:\n" +
               "Name:\t" + str(self.name) + "\n" +
               "\nDescription:\n" +
-              str(self.description) + "\n" +
-              "\nAvailable Actions:")
+              str(self.description))
+
+        print("\nAvailable Actions:")
         if (len(self.actions) == 0):
             print("None")
         else:
             for each_action in self.actions.values():
                 print(each_action.__name__)
-        print("\nsubitems:")
+
+        print("\nSubitems:")
         if (len(self.subitems) == 0):
             print("None")
         else:
             for each_item in self.subitems:
                 print(str(each_item.name))
+
+        print("\nTraits:")
+        if (len(self.traits) == 0):
+            print("None")
+        else:
+            for each_trait in self.traits:
+                print(str(each_trait) + ": " + str(self.traits[each_trait]))
         #print("\n-------------------------\n")
 
 
@@ -87,6 +97,15 @@ class GameItem():
                         if (this_item_file):
                             this_item.load_item_from_file(this_item_file)
                             self.subitems.append(this_item) 
+
+            if "traits: " in each_line:
+                this_line = str(each_line.replace("traits: ", "").replace("\n", ""))
+                these_traits = this_line.split(", ")
+
+                for each_trait in these_traits:
+                    trait_and_value = each_trait.split("=")
+                    self.traits[trait_and_value[0]] = trait_and_value[1]
+
 
     #end load item from file
 

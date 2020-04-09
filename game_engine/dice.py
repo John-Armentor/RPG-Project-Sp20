@@ -63,7 +63,7 @@ def skill_check(f_character, f_skill, f_difficulty = "standard"):
 
 #roll a plain die, not related to a check,
 #   useful for damage dice
-def roll_d(f_die_size):
+def roll_d(f_die_size = 100):
     return int((random.randrange(f_die_size-1))+1) #rolls between 1 and die size, inclusively
 #end roll d_ 
 
@@ -94,11 +94,16 @@ def opposed_check(f_p1, f_p2,
     p1_target = int(math.floor(float(f_skill1) * difficulty_grades[f_difficulty1])) 
     p2_target = int(math.floor(float(f_skill2) * difficulty_grades[f_difficulty2])) 
 
+
     #debugging
-    print(p1_roll)
-    print(p1_target)
-    print(p2_roll)
-    print(p2_target)
+    display_rolls = True
+    if display_rolls:
+        print("In dice.py > opposed_check:")
+        print("P1 Roll: " + str(p1_roll))
+        print("P1 Skill: " + str(p1_target))
+        print("P2 Roll: " + str(p2_roll))
+        print("P2 Skill: " + str(p2_target))
+    
 
     #if player 1 succeeds and player 2 fails, player 1 wins
     if ( (p1_roll < p1_target) and (p2_roll > p2_target) ):
