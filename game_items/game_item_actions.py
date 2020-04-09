@@ -85,7 +85,7 @@ def drink_healing_potion(f_subject = None):
 
 
 valid_actions = {
-                "attack": attack, 
+                "weapon_attack": weapon_attack, 
                 "parry": parry,
                 "explode": explode,
                 "drink_healing_potion": drink_healing_potion

@@ -34,14 +34,26 @@ def attack_action(f_attacker, f_defender,
         print("An error occurred in attack_action when making the skill check:")
         print(error)
         print("Parameters:")
-        print(locals())
+        print(locals(), sep="\n")
 
     else:
         if (skill_results[0] == None): #if no-ne succeeds the attack or parry roll
             print("attack_action: No one succeeded their combat roll.") #debugging
 
-        elif (skill_results[0] == f_attacker):
+        elif (skill_results[0] == f_attacker): #attacker wins
             print("attack_action: The attack roll was successful.") #debugging
+            
+            try: #perform attack action
+                f_attacker_weapon.actions["weapon_attack"](f_attacker_weapon, 
+                                                         f_attacker, f_defender,
+                                                         skill_results[1])
+            except Exception as error:
+                print("An error occurred in combat.py > attack_action, " +
+                      "while attempting weapon_attack:")
+                print(error)
+                print("Parameters:")
+                print(locals(), sep="\n")
+
 
         else:
-            print("attack_action: The defender parried.") 
+            print("attack_action: The defender parried.") #debugging

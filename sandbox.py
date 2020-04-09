@@ -25,6 +25,7 @@ import main_menu
 import pickler
 import chat_message
 import dice
+import combat
 
 import tkinter
 import uuid
@@ -35,26 +36,27 @@ from functools import partial
 print("-------------------------Running sandbox.py-------------------------\n\n")
 
 command = ""
-
 campaign_title = "The Chronicles of Testing"
+reset = False
+save_state = True
 
 filename = str(campaign_title.replace(" ", "_"))
-table1 = pickler.load_object(filename)
 users = []
 
-for each_user in table1.users.values():
-    users.append(each_user)
-    #SANDBOX UPDATE: users[0] replaces user1, users[1] replaces user2
+if reset:
+    gm1 = user.User(True)
+    table1 = tabletop.Tabletop(gm1, campaign_title)
+    users.append(user.User(False, player_character.PlayerCharacter(table1), table1))
+    users.append(user.User(False, player_character.PlayerCharacter(table1), table1))
+    table1.put_on_table(users[0])
+    table1.put_on_table(users[1])
 
-
-"""
-gm1 = user.User(True)
-table1 = tabletop.Tabletop(gm1, campaign_title)
-users0 = user.User(False, player_character.PlayerCharacter(table1), table1)
-users1 = user.User(False, player_character.PlayerCharacter(table1), table1)
-table1.put_on_table(users0)
-table1.put_on_table(users1)
-"""
+else:
+    table1 = pickler.load_object(filename)
+    for each_user in table1.users.values():
+        users.append(each_user)
+        #SANDBOX UPDATE: users[0] replaces user1, users[1] replaces user2
+    
 
 #table1.campaign_name = campaign_title
 #table1.player_characters[users[0].active_character.object_id] = player_character.PlayerCharacter(table1)
@@ -69,7 +71,7 @@ table1.put_on_table(users1)
 
 
 instructions = ("\n\nsandbox commands:\n" +
-                "exit:\tclose the program\n" +
+                "exit:\tclose the program (saves if saving is enabled)\n" +
                 "help:\tprint list of commands\n" +
                 #"AAAAAH!:\trun every command\n" +
 
@@ -110,7 +112,7 @@ instructions = ("\n\nsandbox commands:\n" +
                 "\n----- Combat Commands -----\n" +
                 "thwack:\tattack the PC (uses take_damage, not weapon_attack)\n" +
                 "chug:\tdrink a healing potion\n" +
-                "npc:\tadd an NPC to the table\n" +
+                "npc:\tadd an NPC to the table (updates users[1])\n" +
                 "engage:\tuse combat.py > attack_action to roll combat between user[0] and an npc\n" + 
 
                 "\n----- Chatlog -----\n" +
@@ -437,17 +439,26 @@ while(command != "exit"):
         lastname = input("Enter last name: ")
         npc.update_name(firstname, lastname)
         character_creation.character_creation(main_menu.MainMenu(table1, table1.gamemaster), npc)
-        table1.put_on_table(npc)
+        table1.player_characters[users[1].active_character.object_id] = npc
+        users[1].active_character = npc
 
         welcome = str(npc.name + " has entered the game.")
         msg = chat_message.ChatMessage(table1.gamemaster, "technical", "public", welcome)
         table1.put_on_table(msg)
         table1.chatlog[msg.object_id].print_chat_message()
 
-
         print("\n-------------------------\n")
 
 
+    elif(command == "engage"):
+        print("-------------------------\n")
+
+        combat.attack_action(users[0].active_character, users[1].active_character)
+
+
+
+
+        print("\n-------------------------\n")
 
 
 
@@ -514,11 +525,12 @@ while(command != "exit"):
 
 
 #save gamestate for future use
-print("-------------------------\n")
-filename = str(table1.campaign_name.replace(" ", "_"))
-pickler.save_object(table1, filename)
-print("Table Saved!")
-print("\n-------------------------\n")
+if save_state:
+    print("-------------------------\n")
+    filename = str(table1.campaign_name.replace(" ", "_"))
+    pickler.save_object(table1, filename)
+    print("Table Saved!")
+    print("\n-------------------------\n")
 
 
 

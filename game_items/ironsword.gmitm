@@ -1,4 +1,4 @@
 name: iron sword
 description: A common arming sword made of iron, used for self defense and as a backup weapon on the battlefield.
-actions: attack, parry
+actions: weapon_attack, parry
 traits: damage=1d8, range=melee, combat_type=one_handed_weapon
