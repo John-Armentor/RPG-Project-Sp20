@@ -547,7 +547,7 @@ while(command != "exit"):
     elif(command == "engage"):
         print("-------------------------\n")
         try:
-            combat.attack_action(users[1].active_character, users[0].active_character)
+            combat.attack_action(table1, users[1].active_character, users[0].active_character)
 
         except Exception as error:
             print("sandbox: error found at " + str(command) + " command:")

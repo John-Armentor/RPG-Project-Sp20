@@ -51,11 +51,3 @@ for each_line in skills_config:
     default_skills[this_skill.id] = this_skill
 #end load
 
-"""
-    this_skill = Skill(skill_data[0], 
-                      skill_data[1], 
-                      abilities.core_abilities[skill_data[2]], 
-                      abilities.core_abilities[skill_data[3]], 
-                      skill_data[4])
-
-"""
