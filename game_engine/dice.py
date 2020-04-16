@@ -94,15 +94,17 @@ def opposed_check(f_p1, f_p2,
     p1_target = int(math.floor(float(f_skill1) * difficulty_grades[f_difficulty1])) 
     p2_target = int(math.floor(float(f_skill2) * difficulty_grades[f_difficulty2])) 
 
+    chat_msg = str(str(f_p1.first_name) + " Roll: " + str(p1_roll) +
+                   "\nTarget: " + str(p1_target) + " (" + f_difficulty1 + ")\n" +
+                   str(f_p2.first_name) + " Roll: " + str(p2_roll) +
+                   "\nTarget: " + str(p2_target) + " (" + f_difficulty2 + ")")
 
     #debugging
     display_rolls = True
     if display_rolls:
         print("In dice.py > opposed_check:")
-        print("P1 Roll: " + str(p1_roll))
-        print("P1 Skill: " + str(p1_target))
-        print("P2 Roll: " + str(p2_roll))
-        print("P2 Skill: " + str(p2_target))
+        print(chat_msg)
+    
     
 
     #if player 1 succeeds and player 2 fails, player 1 wins
@@ -132,8 +134,11 @@ def opposed_check(f_p1, f_p2,
 
         #if the differences are tied, reroll
         else:
-           victor = opposed_check(f_p1, f_p2, f_skill1, f_skill2, f_difficulty1, f_difficulty2)
-
+            try:
+                return opposed_check(f_p1, f_p2, f_skill1, f_skill2, f_difficulty1, f_difficulty2)
+            except Exception as error:
+                print("Error in dice.py > opposed_check (tiebreaker):")
+                print(error)
     #if neither player succeeds
     else:
         victor = None
