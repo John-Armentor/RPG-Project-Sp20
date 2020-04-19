@@ -96,6 +96,7 @@ instructions = ("\n\nsandbox commands:\n" +
 
                 "\n----- Game Engine Commands -----\n" +
                 "printskills:\tview all skills in the skills.gameconfig file\n" +
+                "reloadskills:\tresets the table's default skills\n" +
                 "printabils:\tview all abilities in the abilities.gameconfig file\n" +
                 "table:\tplace the character and a new item on the table and confirm\n" +
                 "printtable:\tprint the object ids of al objects on the table\n" +
@@ -319,6 +320,16 @@ while(command != "exit"):
             print(error)
         print("\n-------------------------\n")
 
+    #reset the table's default skills according to skills.gameconfig
+    elif (command == "resetskills"):
+        print("-------------------------\n")
+        try:
+            table1.skills = skills.load_default_skills()
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
+        print("\n-------------------------\n")
+
     #confirm skills loaded from game config file
     elif (command == "printabils"):
         print("-------------------------\n")
@@ -450,12 +461,13 @@ while(command != "exit"):
     elif (command == "opposed"):
         print("-------------------------\n")
         try:
-            winner = dice.opposed_check(users[0].active_character, 
-                               users[1].active_character, 
-                               users[0].active_character.skills[input("Enter Player 1 Skill: ")],
-                               input("Enter Player 1 Difficulty: "),
-                               users[1].active_character.skills[input("Enter Player 2 Skill: ")],
-                               input("Enter Player 2 Difficulty: ") )
+            winner = dice.opposed_check(table1,
+                                        users[0].active_character, 
+                                        users[1].active_character, 
+                                        input("Enter Player 1 Skill: "),
+                                        input("Enter Player 1 Difficulty: "),
+                                        input("Enter Player 2 Skill: "),
+                                        input("Enter Player 2 Difficulty: ") )
             if winner[0] == None:
                 print("Both players failed...")
             else:
@@ -547,7 +559,7 @@ while(command != "exit"):
     elif(command == "engage"):
         print("-------------------------\n")
         try:
-            combat.attack_action(users[1].active_character, users[0].active_character)
+            combat.attack_action(table1, users[1].active_character, users[0].active_character)
 
         except Exception as error:
             print("sandbox: error found at " + str(command) + " command:")
