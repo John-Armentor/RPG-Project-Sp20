@@ -41,13 +41,23 @@ class Skill:
 
 
 #load skills from game configuration file
-default_skills = {}
-for each_line in skills_config:
-    skill_data = str(each_line.replace("\n", "")).split(", ")
-    skill_traits = []
-    for each_item in skill_data:
-        skill_traits.append(each_item)
-    this_skill = Skill(*skill_traits)
-    default_skills[this_skill.id] = this_skill
-#end load
+def load_default_skills():
+    skills_config = open("./player_character/skills/skills.gameconfig")
+    skillset = {}
+
+    for each_line in skills_config:
+
+        skill_data = str(each_line.replace("\n", "")).split(", ")
+        skill_traits = []
+
+        for each_item in skill_data:
+            skill_traits.append(each_item)
+
+        this_skill = Skill(*skill_traits)
+        skillset[this_skill.id] = this_skill
+
+    return skillset
+
+default_skills = load_default_skills()
+#end load default skills
 

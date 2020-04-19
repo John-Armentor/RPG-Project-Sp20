@@ -10,6 +10,7 @@
 import random
 import math
 import sys
+import chat_message
 
 
 difficulty_grades = {
@@ -74,8 +75,8 @@ def roll_d(f_die_size = 100):
 #   if only one does then that player wins,
 #   else the player who rolls the closest to their 
 #   skill but less than their skill wins
-def opposed_check(f_p1, f_p2, 
-                  f_skill1 = 50, f_difficulty1 = "standard",
+def opposed_check(f_table, f_p1, f_p2, 
+                  f_skill1, f_difficulty1 = "standard",
                   f_skill2 = None, f_difficulty2 = None):
     #adjust parameters
     if f_skill2 == None:
@@ -91,13 +92,15 @@ def opposed_check(f_p1, f_p2,
     p2_roll = random.randrange(100) #produces a pseudorandom integer between 0 and 99 inclusively
 
     #get targets modified by any difficulty modifiers
-    p1_target = int(math.floor(float(f_skill1) * difficulty_grades[f_difficulty1])) 
-    p2_target = int(math.floor(float(f_skill2) * difficulty_grades[f_difficulty2])) 
+    p1_target = int(math.floor(float(f_p1.skills[f_skill1]) * difficulty_grades[f_difficulty1])) 
+    p2_target = int(math.floor(float(f_p2.skills[f_skill2]) * difficulty_grades[f_difficulty2])) 
 
-    chat_msg = str(str(f_p1.first_name) + " Roll: " + str(p1_roll) +
-                   "\nTarget: " + str(p1_target) + " (" + f_difficulty1 + ")\n" +
-                   str(f_p2.first_name) + " Roll: " + str(p2_roll) +
-                   "\nTarget: " + str(p2_target) + " (" + f_difficulty2 + ")")
+    chat_msg = str(str(f_p1.first_name) + " uses " + str(f_table.skills[f_skill1].name) + " against " +
+                   str(f_p2.first_name) + "'s " + str(f_table.skills[f_skill2].name) + ".\n" +
+                   str(f_p1.first_name) + " rolled " + str(p1_roll) +
+                   " out of " + str(p1_target) + " (" + f_difficulty1 + ").\n" +
+                   str(f_p2.first_name) + " rolled " + str(p2_roll) +
+                   " out of " + str(p2_target) + " (" + f_difficulty2 + ").")
 
     #debugging
     display_rolls = True
@@ -116,6 +119,7 @@ def opposed_check(f_p1, f_p2,
     elif ( (p2_roll < p2_target) and (p1_roll > p1_target) ):
         victor = f_p2
         defeated = f_p1
+
 
     #if both players succeed, the roller closest to their skill difficulty wins
     elif ( (p1_roll < p1_target) and (p2_roll < p2_target) ):
@@ -143,7 +147,7 @@ def opposed_check(f_p1, f_p2,
     else:
         victor = None
         defeated = None
-
+        chat_msg = chat_msg + str("\nBoth characters failed their checks.")
     #
 
     #determine levels of advantage
@@ -155,6 +159,8 @@ def opposed_check(f_p1, f_p2,
             advantage += 1
         if (p2_roll > fumble_target):
             advantage += 1
+        chat_msg = chat_msg + str("\n" + str(victor.first_name) + " won the check.\n" +
+                                  str(victor.first_name) + " has " + str(advantage) + " levels of advantage.")
     elif victor == f_p2:
         if (p2_roll < p2_target):
             advantage += 1
@@ -162,7 +168,12 @@ def opposed_check(f_p1, f_p2,
             advantage += 1
         if (p1_roll > fumble_target):
             advantage += 1
+        chat_msg = chat_msg + str("\n" + str(defeated.first_name) + " lost the check.\n" + 
+                                  str(victor.first_name) + " has " + str(advantage) + " levels of advantage.")
+
     #
+
+    f_table.put_on_table(chat_message.ChatMessage(f_table.gamemaster, "technical", "public", chat_msg))
 
     return [victor, advantage]
 

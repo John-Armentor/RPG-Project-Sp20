@@ -29,9 +29,9 @@ def attack_action(f_table, f_attacker, f_defender,
 
     #attempt opposed combat skill check between attacker and defender
     try:
-        skill_results = dice.opposed_check(f_attacker, f_defender, 
-                                           f_attacker.skills[f_attacker_skill], f_attacker_difficulty,
-                                           f_defender.skills[f_defender_skill], f_defender_difficulty)
+        skill_results = dice.opposed_check(f_table, f_attacker, f_defender, 
+                                           f_attacker_skill, f_attacker_difficulty,
+                                           f_defender_skill, f_defender_difficulty)
     
     except Exception as error:
         print("An error occurred in attack_action when making the skill check:")
