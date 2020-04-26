@@ -21,6 +21,7 @@ import game_item_actions
 import story_item
 import user
 import tabletop
+import combat
 import main_menu
 import pickler
 import chat_message
@@ -96,6 +97,7 @@ instructions = ("\n\nsandbox commands:\n" +
                 "\n----- Combat Commands -----\n" +
                 "thwack:\tattack the PC\n" +
                 "chug:\tdrink a healing potion\n" +
+                "combat:\topen the combat window\n" +
 
                 "\n----- Chatlog -----\n" +
                 "psst:\tput a chat message on the table and output to console\n" +
@@ -389,6 +391,12 @@ while(command != "exit"):
         table1.put_on_table(msg)
         table1.chatlog[msg.object_id].print_chat_message()
         
+        print("\n-------------------------\n")
+
+    #open the combat window
+    elif (command == "combat"):    
+        print("-------------------------\n")
+        combat.combat(table1, table1.player_characters[user1.active_character.object_id])
         print("\n-------------------------\n")
 
 
