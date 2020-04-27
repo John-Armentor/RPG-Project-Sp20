@@ -65,7 +65,7 @@ def combat(f_game_table, f_character):
     #build frame
     chatlog_frame = tkinter.LabelFrame(combat_window, text = "Chatlog:", padx = 5, pady = 5,
                                        labelanchor = tkinter.NW)
-    chatlog_frame.grid(row = 0, column = 0)
+    chatlog_frame.grid(row = 0, column = 0, rowspan = 5, sticky = tkinter.N)
     refresh_chatlog() #keep up to date
 
     for each_message in f_game_table.chatlog.values():
@@ -76,11 +76,11 @@ def combat(f_game_table, f_character):
 
     #text entry to create chat message
     chat_entry = tkinter.Entry(combat_window)     #text entry field
-    chat_entry.grid(row = 1, column = 0)
+    chat_entry.grid(row = 6, column = 0, sticky = tkinter.N)
 
 
     chat_submit = tkinter.Button(combat_window, text = "Send", command = send_chat_message)
-    chat_submit.grid(row = 2, column = 0)
+    chat_submit.grid(row = 7, column = 0, sticky = tkinter.N)
     #end text entry chat message
 
     ##### END CHAT #####
@@ -92,7 +92,7 @@ def combat(f_game_table, f_character):
     # frame to hold player information
     player_info_frame = tkinter.LabelFrame(combat_window, text = f_character.name, padx = 5, pady = 5,
                                            labelanchor = tkinter.NW)
-    player_info_frame.grid(row = 0, column = 1)
+    player_info_frame.grid(row = 0, column = 1, rowspan = 2, sticky = tkinter.N)
 
     #if image exists, load it and pack it
     if(f_character.image_filename != ""):
@@ -160,14 +160,27 @@ def combat(f_game_table, f_character):
 
         # Temp label to show design for 'actions remaining'
         actions_remaining_label = tkinter.Label(combat_window, text = "Actions Remaining: 3")
-        actions_remaining_label.grid(row = 1, column = 1)
+        actions_remaining_label.grid(row = 3, column = 1)
 
-        # Listbox used to display available actions
-        action_listbox = tkinter.Listbox(combat_window)
-        action_listbox.grid(row = 2, column = 1)
-
-        # List of possible actions for the player
+        # List of possible actions for the player and list of possible targets
         action_list = ["Attack"]
+        target_list = ["Target 1", "Target 2", "Target 3"]
+        action_var = tkinter.StringVar(value = action_list)
+        target_var = tkinter.StringVar(value = target_list)
+
+        # Listboxes used to display available actions and targets
+        action_label = tkinter.Label(combat_window, text = "Actions:")
+        action_label.grid(row = 4, column = 1)
+        action_listbox = tkinter.Listbox(combat_window, height = 1, listvariable = action_var)
+        action_listbox.grid(row = 5, column = 1)
+
+        target_label = tkinter.Label(combat_window, text = "Targets:")
+        target_label.grid(row = 6, column = 1)
+        target_listbox = tkinter.Listbox(combat_window, height = 1, listvariable = target_var)
+        target_listbox.grid(row = 7, column = 1)
+
+        action_var.set(action_list)
+        target_var.set(target_list)
 
         ##### END ACTIONS #####
 
@@ -178,7 +191,7 @@ def combat(f_game_table, f_character):
         # frame to hold list of targets and target information
         target_frame = tkinter.LabelFrame(combat_window, text = "Targets:", padx = 5, pady = 5,
                                           labelanchor = tkinter.NW)
-        target_frame.grid(row = 0, column = 2)
+        target_frame.grid(row = 0, column = 2, rowspan = 7, sticky = tkinter.N)
 
         # temp label to display target_frame
         temp_label = tkinter.Label(target_frame, text = "Targets go here")
