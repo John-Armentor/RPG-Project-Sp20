@@ -24,13 +24,13 @@ import tkinter
 ###################################
 #######   Combat Screen   #########
 ###################################
-def combat(f_game_table, f_character):
+def combat(parent_window, f_game_table, f_character):
 
     print("Combat")
     print()
 
     # tkinter window for combat GUI
-    combat_window = tkinter.Toplevel()           
+    combat_window = tkinter.Toplevel(parent_window)           
     combat_window.title("Combat")
 
 

@@ -24,6 +24,7 @@ import character_creation
 import game_item
 import game_item_actions
 import tabletop
+import combat
 import chat_message
 import story_item
 
@@ -122,6 +123,22 @@ class MainMenu(tkinter.Tk):
                                     sticky = tkinter.N)
 
         ##### END CHARACTER SHEET #####
+
+
+
+        ##### COMBAT #####
+
+        # Function for combat_button, opens the combat window
+        def open_combat_window():
+            combat.combat(self, self.tabletop, self.user.active_character)
+
+        # Button to open the combat window
+        combat_button = tkinter.Button(self, text = "Enter Combat",
+                                       command = open_combat_window)
+        combat_button.grid(row = 2, column = 2, padx = 10, pady = 10, sticky = tkinter.N)
+
+
+        ##### END COMBAT #####
 
 
 
