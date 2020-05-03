@@ -32,6 +32,7 @@ def combat(parent_window, f_game_table, f_character):
     # tkinter window for combat GUI
     combat_window = tkinter.Toplevel(parent_window)           
     combat_window.title("Combat")
+    combat_window.state('zoomed')
 
 
 
