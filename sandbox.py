@@ -21,6 +21,7 @@ import game_item_actions
 import story_item
 import user
 import tabletop
+import combat
 import main_menu
 import pickler
 import chat_message
@@ -115,6 +116,9 @@ instructions = ("\n\nsandbox commands:\n" +
                 "chug:\tdrink a healing potion\n" +
                 "npc:\tadd an NPC to the table (updates users[1])\n" +
                 "engage:\tuse combat.py > attack_action to roll combat between user[0] and an npc\n" + 
+
+                "combat:\topen the combat window\n" +
+
 
                 "\n----- Chatlog -----\n" +
                 "psst:\tput a chat message on the table and output to console\n" +
@@ -533,6 +537,12 @@ while(command != "exit"):
             print(error)
         print("\n-------------------------\n")
 
+    #open the combat window
+    elif (command == "combat"):    
+        print("-------------------------\n")
+        combat.combat(table1, table1.player_characters[user1.active_character.object_id])
+        print("\n-------------------------\n")
+
 
     elif(command == "npc"):
         print("-------------------------\n")
@@ -649,6 +659,3 @@ if save_state:
     pickler.save_object(table1, filename)
     print("Table Saved!")
     print("\n-------------------------\n")
-
-
-
