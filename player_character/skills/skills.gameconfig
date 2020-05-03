@@ -45,7 +45,12 @@ streetwise, Streetwise, soul, charisma, professional
 survival, Survival, constitution, soul, professional
 teach, Teach, intelligence, charisma, professional
 track, Track, intelligence, constitution, professional
+archery, Archery, dexterity, strength, combat
+assassination, Assassination, dexterity, intelligence, combat
+legion_tactics, Legion Tactics, strength, soul, combat
+swordfighting, Swordfighting, dexterity, constitution, combat
 unarmed, Unarmed, strength, dexterity, combat
+throwing, Throwing, strength, dexterity, combat
 binding, Binding, soul, charisma, magic
 devotion, Devotion, soul, charisma, magic
 exhort, Exhort, intelligence, charisma, magic
