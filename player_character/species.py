@@ -6,13 +6,15 @@
 
 #this file contains species playable by player characters
 
+import random
+
 class species: 
     def __init__(self, f_name):
         self.name = f_name
 
         #possible target zones, 
         #   dictionary with string key value for each tragetable body part
-        #   paired with a percentage (0 to 100) representing the odds that 
+        #   paired with a percentage (1 to 100) representing the odds that 
         #   that area is hit. This would typically coorespond to the size
         #   of the area, so it also represents a portion of the hit points
         #   that area contains
@@ -24,6 +26,24 @@ class species:
 
         self.native_languages = []
 
+    #end initializer
+
+
+    def get_random_hitbox(self):
+        """
+            selects a random hitbox from the species hitbox dict,
+            useful for dealing damage anytime the attacker does
+            not target a location,
+        """
+        roll = random.randrange(100) #produces a pseudorandom integer between 0 and 99 inclusively
+        i = 0
+        for each_hitbox in self.hitboxes:
+            i += self.hitboxes[each_hitbox]
+            if roll < i:
+                return each_hitbox
+    #end return random hitbox
+
+
 #end species definition
 
 #list of all species
@@ -34,7 +54,10 @@ languages = {"vernacular": "vernacular"}
 
 #the human species
 human = species("human")
-human.hitboxes["head"] = 10
+#hitbox values represent the percentage (1-100) of hp that hitbox takes,
+#   and the probability that that hitbox gets hit in an attack,
+#   MUST add up to 100
+human.hitboxes["head"] = 10  
 human.hitboxes["chest"] = 20
 human.hitboxes["abdomen"] = 20
 human.hitboxes["left_arm"] = 15

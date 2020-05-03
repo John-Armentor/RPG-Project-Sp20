@@ -40,6 +40,8 @@ from PIL import Image, ImageTk #image handling for various file types
 
 
 import character_creation
+sys.path.append('./game_items')
+import game_item
 
 
 #player character class
@@ -110,6 +112,10 @@ class PlayerCharacter:
         #inventory
         self.inventory = {}
 
+        #unarmed attack as a game_item
+        self.unarmed = game_item.GameItem()
+        self.unarmed.load_item_from_file(open("./game_items/fist.gmitm"))
+
     #end initializer
 
 
@@ -174,16 +180,6 @@ class PlayerCharacter:
     #
 
 
-    #update name
-    def update_name(self, f_first = "", f_last = "", f_middle = "", f_title = ""):
-        self.first_name = f_first
-        self.middle_name = f_middle
-        self.family_name = f_last
-        self.name = str(self.first_name + " " + self.family_name)
-        self.title = f_title
-        self.formal_name = str(self.title + " " + self.first_name + " " +
-                               self.middle_name + " " + self.family_name)
-    #
 
 
     #update ability scores
