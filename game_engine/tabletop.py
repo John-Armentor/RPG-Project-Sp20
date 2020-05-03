@@ -77,10 +77,10 @@ class Tabletop:
     #auto add to table function, determines the class type and stores in proper dictionary
     def put_on_table(self, f_token):
         if f_token.__class__.__name__ == "PlayerCharacter":
-            self.player_characters[f_token.object_id] = f_token
-
-        elif f_token.__class__.__name__ == "NonplayerCharacter":
-            self.nonplayer_characters[f_token.object_id] = f_token
+            if f_token.is_npc == False:
+                self.player_characters[f_token.object_id] = f_token
+            else:
+                self.nonplayer_characters[f_token.object_id] = f_token
 
         elif f_token.__class__.__name__ == "GameItem":
             self.game_items[f_token.object_id] = f_token

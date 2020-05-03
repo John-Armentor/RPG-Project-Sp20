@@ -537,7 +537,7 @@ while(command != "exit"):
     elif(command == "npc"):
         print("-------------------------\n")
         try:
-            npc = player_character.PlayerCharacter(table1)
+            npc = player_character.PlayerCharacter(table1, True)
             firstname = input("Enter first name: ")
             lastname = input("Enter last name: ")
             npc.update_name(firstname, lastname)
