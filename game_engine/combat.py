@@ -20,6 +20,7 @@ import tabletop
 import chat_message
 import story_item
 import tkinter
+from PIL import Image, ImageTk #image handling for various file types
 
 ###################################
 #######   Combat Screen   #########
@@ -100,7 +101,7 @@ def combat(parent_window, f_game_table, f_character):
         image = Image.open(f_character.image_filename)
         image.thumbnail((400,400), Image.ANTIALIAS) 
         tk_image = ImageTk.PhotoImage(image)
-        frame_image = tkinter.Label(frame, image=tk_image)
+        frame_image = tkinter.Label(player_info_frame, image=tk_image)
         frame_image.image = tk_image
         frame_image.pack()
 
@@ -157,48 +158,52 @@ def combat(parent_window, f_game_table, f_character):
 
 
 
-        ##### ACTIONS  #####
+    ##### ACTIONS  #####
 
-        # Temp label to show design for 'actions remaining'
-        actions_remaining_label = tkinter.Label(combat_window, text = "Actions Remaining: 3")
-        actions_remaining_label.grid(row = 2, column = 1)
+    # Temp label to show design for 'actions remaining'
+    actions_remaining_label = tkinter.Label(combat_window, text = "Actions Remaining: 3")
+    actions_remaining_label.grid(row = 2, column = 1)
 
-        # List of possible actions for the player and list of possible targets
-        action_list = ["Attack"]
-        target_list = ["Target 1", "Target 2", "Target 3"]
-        action_var = tkinter.StringVar(value = action_list)
-        target_var = tkinter.StringVar(value = target_list)
+    # List of possible actions for the player and list of possible targets
+    action_list = ["Attack"]
+    target_list = ["Target 1", "Target 2", "Target 3"]
+    action_var = tkinter.StringVar(value = action_list)
+    target_var = tkinter.StringVar(value = target_list)
 
-        # Listboxes used to display available actions and targets
-        action_label = tkinter.Label(combat_window, text = "Actions:")
-        action_label.grid(row = 3, column = 1)
-        action_listbox = tkinter.Listbox(combat_window, height = 1, listvariable = action_var)
-        action_listbox.grid(row = 4, column = 1)
+    # Listboxes used to display available actions and targets
+    action_label = tkinter.Label(combat_window, text = "Actions:")
+    action_label.grid(row = 3, column = 1)
+    action_listbox = tkinter.Listbox(combat_window, height = 1, listvariable = action_var)
+    action_listbox.grid(row = 4, column = 1)
 
-        target_label = tkinter.Label(combat_window, text = "Targets:")
-        target_label.grid(row = 5, column = 1)
-        target_listbox = tkinter.Listbox(combat_window, height = 1, listvariable = target_var)
-        target_listbox.grid(row = 6, column = 1)
+    target_label = tkinter.Label(combat_window, text = "Targets:")
+    target_label.grid(row = 5, column = 1)
+    target_listbox = tkinter.Listbox(combat_window, height = 1, listvariable = target_var)
+    target_listbox.grid(row = 6, column = 1)
 
-        action_var.set(action_list)
-        target_var.set(target_list)
+    action_var.set(action_list)
+    target_var.set(target_list)
 
-        # Button to perform selected action
-        perform_action_button = tkinter.Button(combat_window, text = "Perform Action")
-        perform_action_button.grid(row = 7, column = 1, padx = 10, pady = 10,
+    # Button to perform selected action
+    perform_action_button = tkinter.Button(combat_window, text = "Perform Action")
+    perform_action_button.grid(row = 7, column = 1, padx = 10, pady = 10,
                                    sticky = tkinter.N)
 
-        ##### END ACTIONS #####
+    ##### END ACTIONS #####
 
 
 
-        ##### TARGETS #####
+    ##### TARGETS #####
 
-        # frame to hold list of targets and target information
-        target_frame = tkinter.LabelFrame(combat_window, text = "Targets:", padx = 5, pady = 5,
-                                          labelanchor = tkinter.NW)
-        target_frame.grid(row = 0, column = 2, rowspan = 8, sticky = tkinter.N)
+    # frame to hold list of targets and target information
+    target_frame = tkinter.LabelFrame(combat_window, text = "Targets:", padx = 5, pady = 5,
+                                      labelanchor = tkinter.NW)
+    target_frame.grid(row = 0, column = 2, rowspan = 8, sticky = tkinter.N)
 
-        # temp label to display target_frame
-        temp_label = tkinter.Label(target_frame, text = "Targets go here")
-        temp_label.pack()
+    # temp label to display target_frame
+    temp_label = tkinter.Label(target_frame, text = "Targets go here")
+    temp_label.pack()
+
+
+    combat_window.mainloop()
+    # End combat window
