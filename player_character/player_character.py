@@ -47,11 +47,12 @@ import game_item
 #player character class
 class PlayerCharacter:
 
-    def __init__(self, f_table):
+    def __init__(self, f_table, f_is_npc = False):
         #demographics
         self.object_id = uuid.uuid1()
         self.table = f_table   #set by tabletop.py put_on_table()
         self.table.put_on_table(self)
+        self.is_npc = f_is_npc
 
         self.first_name = "Etrius"
         self.middle_name = ""
@@ -61,7 +62,7 @@ class PlayerCharacter:
         self.formal_name = str(self.title + " " + self.first_name + " " +
                                self.middle_name + " " + self.family_name)
 
-        self.image_filename = ""       #stores a system path to a picture
+        self.image_filename = "images.halbred_knight.jpg"       #stores a system path to a picture
         self.description = "A stunning Character."
 
 
