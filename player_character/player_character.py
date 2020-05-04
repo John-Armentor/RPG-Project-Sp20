@@ -51,7 +51,6 @@ class PlayerCharacter:
         #demographics
         self.object_id = uuid.uuid1()
         self.table = f_table   #set by tabletop.py put_on_table()
-        self.table.put_on_table(self)
         self.is_npc = f_is_npc
 
         self.first_name = "Etrius"
@@ -62,7 +61,7 @@ class PlayerCharacter:
         self.formal_name = str(self.title + " " + self.first_name + " " +
                                self.middle_name + " " + self.family_name)
 
-        self.image_filename = "images.halbred_knight.jpg"       #stores a system path to a picture
+        self.image_filename = "images/halbred_knight.jpg"       #stores a system path to a picture
         self.description = "A stunning Character."
 
 
@@ -117,6 +116,7 @@ class PlayerCharacter:
         self.unarmed = game_item.GameItem()
         self.unarmed.load_item_from_file(open("./game_items/fist.gmitm"))
 
+        self.table.put_on_table(self)
     #end initializer
 
 

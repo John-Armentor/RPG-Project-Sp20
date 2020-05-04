@@ -48,7 +48,7 @@ if reset:
     gm1 = user.User(True)
     table1 = tabletop.Tabletop(gm1, campaign_title)
     users.append(user.User(False, player_character.PlayerCharacter(table1), table1))
-    users.append(user.User(False, player_character.PlayerCharacter(table1), table1))
+    users.append(user.User(False, player_character.PlayerCharacter(table1, True), table1))
     table1.put_on_table(users[0])
     table1.put_on_table(users[1])
 
