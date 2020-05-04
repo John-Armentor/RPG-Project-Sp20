@@ -47,7 +47,7 @@ import game_item
 #player character class
 class PlayerCharacter:
 
-    def __init__(self, f_table, f_is_npc = False):
+    def __init__(self, f_table, f_is_npc):
         #demographics
         self.object_id = uuid.uuid1()
         self.table = f_table   #set by tabletop.py put_on_table()

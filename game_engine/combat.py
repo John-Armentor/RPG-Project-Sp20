@@ -174,7 +174,12 @@ def combat(parent_window, f_game_table, f_character):
 
     # List of possible actions for the player and list of possible targets
     action_list = ["Attack"]
-    target_list = ["Target 1", "Target 2", "Target 3"]
+    target_list = []
+
+    # Populate target list from nonplayer_characters dictionary on table
+    for each_npc in f_game_table.nonplayer_characters.values():
+        target_list.append(each_npc.name)
+
     action_var = tkinter.StringVar(value = action_list)
     target_var = tkinter.StringVar(value = target_list)
 
@@ -234,19 +239,19 @@ def combat(parent_window, f_game_table, f_character):
     target_frame.grid(row = 0, column = 2, rowspan = 8, sticky = tkinter.N)
 
     # debugging
-    test_label = tkinter.Label(target_frame, text = "This is the target frame")
-    test_label.pack()
+    #test_label = tkinter.Label(target_frame, text = "This is the target frame")
+    #test_label.pack()
 
     # creates frame and displays information for each npc in tabletop.nonplayer_characters
     for each_npc in f_game_table.nonplayer_characters.values():
         npc_frame = tkinter.LabelFrame(target_frame, 
                                       text = f_game_table.nonplayer_characters[each_npc.object_id].name,
                                       padx = 5, pady = 5, labelanchor = tkinter.NW)
-        npc_frame.grid(rowspan = 2, sticky = tkinter.N)
+        npc_frame.pack()
 
         # debugging
-        test_label2 = tkinter.Label(npc_frame, text = "This is the npc frame")
-        test_label2.pack()
+        #test_label2 = tkinter.Label(npc_frame, text = "This is the npc frame")
+        #test_label2.pack()
 
         # if image exists, load it and pack it
         if(f_game_table.nonplayer_characters[each_npc.object_id].image_filename != ""):
