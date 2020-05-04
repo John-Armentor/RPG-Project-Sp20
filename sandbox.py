@@ -26,6 +26,7 @@ import main_menu
 import pickler
 import chat_message
 import dice
+import combat
 
 import tkinter
 import uuid
@@ -36,26 +37,27 @@ from functools import partial
 print("-------------------------Running sandbox.py-------------------------\n\n")
 
 command = ""
-
 campaign_title = "The Chronicles of Testing"
+reset = False
+save_state = True
 
 filename = str(campaign_title.replace(" ", "_"))
-table1 = pickler.load_object(filename)
 users = []
 
-for each_user in table1.users.values():
-    users.append(each_user)
-    #SANDBOX UPDATE: users[0] replaces user1, users[1] replaces user2
+if reset:
+    gm1 = user.User(True)
+    table1 = tabletop.Tabletop(gm1, campaign_title)
+    users.append(user.User(False, player_character.PlayerCharacter(table1), table1))
+    users.append(user.User(False, player_character.PlayerCharacter(table1), table1))
+    table1.put_on_table(users[0])
+    table1.put_on_table(users[1])
 
-
-"""
-gm1 = user.User(True)
-table1 = tabletop.Tabletop(gm1, campaign_title)
-users0 = user.User(False, player_character.PlayerCharacter(table1), table1)
-users1 = user.User(False, player_character.PlayerCharacter(table1), table1)
-table1.put_on_table(users0)
-table1.put_on_table(users1)
-"""
+else:
+    table1 = pickler.load_object(filename)
+    for each_user in table1.users.values():
+        users.append(each_user)
+        #SANDBOX UPDATE: users[0] replaces user1, users[1] replaces user2
+    
 
 #table1.campaign_name = campaign_title
 #table1.player_characters[users[0].active_character.object_id] = player_character.PlayerCharacter(table1)
@@ -70,7 +72,7 @@ table1.put_on_table(users1)
 
 
 instructions = ("\n\nsandbox commands:\n" +
-                "exit:\tclose the program\n" +
+                "exit:\tclose the program (saves if saving is enabled)\n" +
                 "help:\tprint list of commands\n" +
                 #"AAAAAH!:\trun every command\n" +
 
@@ -95,6 +97,7 @@ instructions = ("\n\nsandbox commands:\n" +
 
                 "\n----- Game Engine Commands -----\n" +
                 "printskills:\tview all skills in the skills.gameconfig file\n" +
+                "reloadskills:\tresets the table's default skills\n" +
                 "printabils:\tview all abilities in the abilities.gameconfig file\n" +
                 "table:\tplace the character and a new item on the table and confirm\n" +
                 "printtable:\tprint the object ids of al objects on the table\n" +
@@ -109,10 +112,10 @@ instructions = ("\n\nsandbox commands:\n" +
                 "opposed:\troll a skill check between two opposing characters\n" +
 
                 "\n----- Combat Commands -----\n" +
-                "thwack:\tattack the PC\n" +
+                "thwack:\tattack the PC (uses take_damage, not weapon_attack)\n" +
                 "chug:\tdrink a healing potion\n" +
-
-                "npc:\tadd an NPC to the table\n" +
+                "npc:\tadd an NPC to the table (updates users[1])\n" +
+                "engage:\tuse combat.py > attack_action to roll combat between user[0] and an npc\n" + 
 
                 "combat:\topen the combat window\n" +
 
@@ -151,46 +154,74 @@ while(command != "exit"):
     #tests Character Sheet GUI
     elif (command == "sheet"):
         print("-------------------------\n")
-        character_sheet.character_sheet(table1.player_characters[users[0].active_character.object_id])
+        try:
+            character_sheet.character_sheet(table1.player_characters[users[0].active_character.object_id])
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
     #tests Character Creation GUI
-    elif (command == "create"):    
+    elif (command == "create"):  
         print("-------------------------\n")
-        character_creation.character_creation(main_menu.MainMenu(table1, users[0]), table1.player_characters[users[0].active_character.object_id])
+        try:
+            character_creation.character_creation(main_menu.MainMenu(table1, users[0]), table1.player_characters[users[0].active_character.object_id])
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
     
     #ensures ability scores have been updated
     elif (command == "abils"):      
         print("-------------------------\n")
-        for each_ability in table1.abilities.values():
-            print(str(each_ability.name)+":\t" + 
-                  str(table1.player_characters[users[0].active_character.object_id].ability_scores[each_ability.id]))
+        try:
+            for each_ability in table1.abilities.values():
+                print(str(each_ability.name)+":\t" + 
+                      str(table1.player_characters[users[0].active_character.object_id].ability_scores[each_ability.id]))
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
     #ensures skills have been updated
     elif (command == "skills"):     
         print("-------------------------\n")
-        for each_skill in table1.skills.values():
-            print(str(each_skill.name)+":\t" + str(table1.player_characters[users[0].active_character.object_id].skills[each_skill.id]))
+        try:
+            for each_skill in table1.skills.values():
+                print(str(each_skill.name)+":\t" + str(table1.player_characters[users[0].active_character.object_id].skills[each_skill.id]))
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
     #view characters inventory
     elif (command == "bags"):       
         print("-------------------------\n")
-        for each_item in table1.player_characters[users[0].active_character.object_id].inventory.values():
-            print(each_item.name)
+        try:
+            for each_item in table1.player_characters[users[0].active_character.object_id].inventory.values():
+                print(each_item.name)
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
     elif (command == "wielded"):
         print("-------------------------\n")
-        for each_item in table1.player_characters[users[0].active_character.object_id].item_slots:
-            print(str(each_item) + ":\t" + str(table1.player_characters[users[0].active_character.object_id].item_slots[each_item]))
+        try:
+            for each_item in table1.player_characters[users[0].active_character.object_id].item_slots:
+                print(str(each_item) + ":\t" + str(table1.player_characters[users[0].active_character.object_id].item_slots[each_item]))
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
     elif (command == "charframe"):
         print("-------------------------\n")
-        table1.player_characters[users[0].active_character.object_id].open_frame()
+        try:
+            table1.player_characters[users[0].active_character.object_id].open_frame()
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
 
@@ -203,36 +234,49 @@ while(command != "exit"):
     #tests function to get a list of game items from folder
     elif (command == "look"):       
         print("-------------------------\n")
-        item_list = game_item.load_items_list()
-        for each_item in item_list:
-            print(each_item.name)
+        try:
+            item_list = game_item.load_items_list()
+            for each_item in item_list:
+                print(each_item.name)
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
     #tests game item load and print
     elif (command == "find"):       
         print("-------------------------\n")
-        iron_sword = game_item.GameItem()
-        iron_sword.load_item_from_file(open("./game_items/ironsword.gmitm"))
-        iron_sword.print_item()
-        table1.player_characters[users[0].active_character.object_id].collect_item(iron_sword)
-        table1.player_characters[users[0].active_character.object_id].item_slots["left_hand"] = table1.player_characters[users[0].active_character.object_id].inventory[iron_sword.object_id]
-        print("\n")
-        journal = game_item.GameItem()
-        journal.load_item_from_file(open("./game_items/journal.gmitm"))
-        journal.print_item()
-        table1.player_characters[users[0].active_character.object_id].collect_item(journal)
+        try:
+            iron_sword = game_item.GameItem()
+            iron_sword.load_item_from_file(open("./game_items/ironsword.gmitm"))
+            iron_sword.print_item()
+            table1.player_characters[users[0].active_character.object_id].collect_item(iron_sword)
+            table1.player_characters[users[0].active_character.object_id].item_slots["left_hand"] = table1.player_characters[users[0].active_character.object_id].inventory[iron_sword.object_id]
+            print("\n")
+            journal = game_item.GameItem()
+            journal.load_item_from_file(open("./game_items/journal.gmitm"))
+            journal.print_item()
+            table1.player_characters[users[0].active_character.object_id].collect_item(journal)
+        
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
     #tests GUI item creation
     elif (command == "craft"):      
         print("-------------------------\n")
-        new_item = game_item.GameItem()
-        game_item.game_item_creation(new_item)
-        new_item.print_item()
-        table1.player_characters[users[0].active_character.object_id].collect_item(new_item) #add to inventory
+        try:
+            new_item = game_item.GameItem()
+            game_item.game_item_creation(new_item)
+            new_item.print_item()
+            table1.player_characters[users[0].active_character.object_id].collect_item(new_item) #add to inventory
 
-        new_item.open_frame()
+            new_item.open_frame()
 
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
 
@@ -245,14 +289,18 @@ while(command != "exit"):
     #make a story item
     elif (command == "story"):
         print("-------------------------\n")
-        new_story = story_item.StoryItem()
-        #new_story.title = input("Enter Story Item Title:")
-        #new_story.message = input("Enter Story Message:")
-        new_story.title = "Discovering the Druiddagger"
-        new_story.message = "You see a large, mysterious blade before you."
+        try:
+            new_story = story_item.StoryItem()
+            #new_story.title = input("Enter Story Item Title:")
+            #new_story.message = input("Enter Story Message:")
+            new_story.title = "Discovering the Druiddagger"
+            new_story.message = "You see a large, mysterious blade before you."
         
-        new_story.image_filename = "./images/img001.png"
-        new_story.open_frame()
+            new_story.image_filename = "./images/img001.png"
+            new_story.open_frame()
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
 
@@ -267,74 +315,108 @@ while(command != "exit"):
     #confirm skills loaded from game config file
     elif (command == "printskills"):
         print("-------------------------\n")
-        for each_skill in table1.skills.values():
-            each_skill.print_skill()
-            print("\n----------\n")
+        try:
+            for each_skill in table1.skills.values():
+                each_skill.print_skill()
+                print("\n----------\n")
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
+        print("\n-------------------------\n")
+
+    #reset the table's default skills according to skills.gameconfig
+    elif (command == "resetskills"):
+        print("-------------------------\n")
+        try:
+            table1.skills = skills.load_default_skills()
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
     #confirm skills loaded from game config file
     elif (command == "printabils"):
         print("-------------------------\n")
-        for each_ability in table1.abilities.values():
-            each_ability.print_ability()
-            print("\n----------\n")
+        try:
+            for each_ability in table1.abilities.values():
+                each_ability.print_ability()
+                print("\n----------\n")
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
     #put the PC on the table
     elif (command == "table"):
         print("-------------------------\n")
-        table1.put_on_table(table1.player_characters[users[0].active_character.object_id]) 
+        try:
+            table1.put_on_table(table1.player_characters[users[0].active_character.object_id]) 
 
-        some_item = game_item.GameItem()
-        some_item.quick_build()
-        print("\n")
-        table1.put_on_table(some_item)
+            some_item = game_item.GameItem()
+            some_item.quick_build()
+            print("\n")
+            table1.put_on_table(some_item)
         
-        for each_character in table1.player_characters.values():
-            print(each_character.name) 
+            for each_character in table1.player_characters.values():
+                print(each_character.name) 
 
-        for each_item in table1.game_items.values():
-            print(each_item.name)
+            for each_item in table1.game_items.values():
+                print(each_item.name)
 
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
     #open main window
     elif (command == "main"):
         print("-------------------------\n")
+        try:
+            window = main_menu.MainMenu(table1, users[0])
+            window.mainloop()
 
-        window = main_menu.MainMenu(table1, users[0])
-        window.mainloop()
-
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
 
     #print object ids of all objects on the table
     elif (command == "printtable"):
         print("-------------------------\n")
+        try:
+            table1.print_object_ids()
 
-        table1.print_object_ids()
-
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
     #save table
     elif (command == "savetable"):
         print("-------------------------\n")
+        try:
+            filename = str(table1.campaign_name.replace(" ", "_"))
+            pickler.save_object(table1, filename)
 
-        filename = str(table1.campaign_name.replace(" ", "_"))
-        pickler.save_object(table1, filename)
+            print("Table Saved!")
 
-        print("Table Saved!")
-
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
     #load table
     elif (command == "loadtable"):
         print("-------------------------\n")
+        try:
+            filename = str(table1.campaign_name.replace(" ", "_"))
+            table2 = pickler.load_object(filename)
+            table2.print_object_ids()
 
-        filename = str(table1.campaign_name.replace(" ", "_"))
-        table2 = pickler.load_object(filename)
-        table2.print_object_ids()
-
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
 
@@ -347,44 +429,61 @@ while(command != "exit"):
     #make a non skill based check
     elif (command == "roll"):
         print("-------------------------\n")
-        prob = input("Enter probability of success:")
-        diff = input("Enter difficulty grade:")
-        dice.roll_check(prob, diff)
+        try:
+            prob = input("Enter probability of success:")
+            diff = input("Enter difficulty grade:")
+            dice.roll_check(prob, diff)
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
     #make a bunch of rolls
     elif (command == "dicetower"):
         print("-------------------------\n")
-        for i in range(100):
-            dice.roll_check(50)
-            print()
+        try:
+            for i in range(100):
+                dice.roll_check(50)
+                print()
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
     #make a skill check
     elif (command == "skillcheck"):
         print("-------------------------\n")
-        skill = input("Enter skill to check:")
-        dice.skill_check(table1.player_characters[users[0].active_character.object_id], skill)
+        try:
+            skill = input("Enter skill to check:")
+            dice.skill_check(table1.player_characters[users[0].active_character.object_id], skill)
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
     #make an opposed roll
     elif (command == "opposed"):
         print("-------------------------\n")
-        winner = dice.opposed_check(users[0].active_character, 
-                           users[1].active_character, 
-                           users[0].active_character.skills[input("Enter Player 1 Skill: ")],
-                           input("Enter Player 1 Difficulty: "),
-                           users[1].active_character.skills[input("Enter Player 2 Skill: ")],
-                           input("Enter Player 2 Difficulty: ") )
-        if winner[0] == None:
-            print("Both players failed...")
-        else:
-            print("The winner is " + str(winner[0].name) + " with " + str(winner[1]) + " levels of advantage.")
-            if winner[0].object_id == users[0].active_character.object_id:
-                print("(User 1)")
-            if winner[0].object_id == users[1].active_character.object_id:
-                print("(User 2)")
+        try:
+            winner = dice.opposed_check(table1,
+                                        users[0].active_character, 
+                                        users[1].active_character, 
+                                        input("Enter Player 1 Skill: "),
+                                        input("Enter Player 1 Difficulty: "),
+                                        input("Enter Player 2 Skill: "),
+                                        input("Enter Player 2 Difficulty: ") )
+            if winner[0] == None:
+                print("Both players failed...")
+            else:
+                print("The winner is " + str(winner[0].name) + " with " + str(winner[1]) + " levels of advantage.")
+                if winner[0].object_id == users[0].active_character.object_id:
+                    print("(User 1)")
+                if winner[0].object_id == users[1].active_character.object_id:
+                    print("(User 2)")
 
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
 
@@ -399,37 +498,43 @@ while(command != "exit"):
     #attack the PC
     elif (command == "thwack"):
         print("-------------------------\n")
-        
-        dmg = dice.roll_d(4)
-        table1.player_characters[users[0].active_character.object_id].take_damage(dmg, "abdomen") 
-        msg_str = str(table1.player_characters[users[0].active_character.object_id].first_name + " has taken " + str(dmg) + " damage!")
-        msg = chat_message.ChatMessage(table1.gamemaster, "technical", "public", msg_str)
-        table1.put_on_table(msg)
-        table1.chatlog[msg.object_id].print_chat_message()
+        try:
+            dmg = dice.roll_d(4)
+            table1.player_characters[users[0].active_character.object_id].take_damage(dmg, "abdomen") 
+            msg_str = str(table1.player_characters[users[0].active_character.object_id].first_name + " has taken " + str(dmg) + " damage!")
+            msg = chat_message.ChatMessage(table1.gamemaster, "technical", "public", msg_str)
+            table1.put_on_table(msg)
+            table1.chatlog[msg.object_id].print_chat_message()
     
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
     #drink a healing potion
     elif (command == "chug"):
         print("-------------------------\n")
-        
-        #make and collect a potion
-        potion = game_item.GameItem()
-        potion.load_item_from_file(open("./game_items/healingpotion.gmitm"))
-        potion.print_item()
-        table1.player_characters[users[0].active_character.object_id].collect_item(potion)
-        print("\n")
+        try:
+            #make and collect a potion
+            potion = game_item.GameItem()
+            potion.load_item_from_file(open("./game_items/healingpotion.gmitm"))
+            potion.print_item()
+            table1.player_characters[users[0].active_character.object_id].collect_item(potion)
+            print("\n")
 
-        #take the drink action
-        table1.player_characters[users[0].active_character.object_id].inventory[potion.object_id].actions["drink_healing_potion"](table1.player_characters[users[0].active_character.object_id])
-        print()
+            #take the drink action
+            table1.player_characters[users[0].active_character.object_id].inventory[potion.object_id].actions["drink_healing_potion"](table1.player_characters[users[0].active_character.object_id])
+            print()
         
-        #add action to chatlog
-        msg = chat_message.ChatMessage(table1.player_characters[users[0].active_character.object_id], "action", "public", 
-                                       "drank a healing potion.")
-        table1.put_on_table(msg)
-        table1.chatlog[msg.object_id].print_chat_message()
+            #add action to chatlog
+            msg = chat_message.ChatMessage(table1.player_characters[users[0].active_character.object_id], "action", "public", 
+                                           "drank a healing potion.")
+            table1.put_on_table(msg)
+            table1.chatlog[msg.object_id].print_chat_message()
         
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
     #open the combat window
@@ -441,23 +546,35 @@ while(command != "exit"):
 
     elif(command == "npc"):
         print("-------------------------\n")
+        try:
+            npc = player_character.PlayerCharacter(table1)
+            firstname = input("Enter first name: ")
+            lastname = input("Enter last name: ")
+            npc.update_name(firstname, lastname)
+            character_creation.character_creation(main_menu.MainMenu(table1, table1.gamemaster), npc)
+            table1.player_characters[users[1].active_character.object_id] = npc
+            users[1].active_character = npc
 
-        npc = player_character.PlayerCharacter(table1)
-        firstname = input("Enter first name: ")
-        lastname = input("Enter last name: ")
-        npc.update_name(firstname, lastname)
-        character_creation.character_creation(main_menu.MainMenu(table1, table1.gamemaster), npc)
-        table1.put_on_table(npc)
+            welcome = str(npc.name + " has entered the game.")
+            msg = chat_message.ChatMessage(table1.gamemaster, "technical", "public", welcome)
+            table1.put_on_table(msg)
+            table1.chatlog[msg.object_id].print_chat_message()
 
-        welcome = str(npc.name + " has entered the game.")
-        msg = chat_message.ChatMessage(table1.gamemaster, "technical", "public", welcome)
-        table1.put_on_table(msg)
-        table1.chatlog[msg.object_id].print_chat_message()
-
-
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
 
+    elif(command == "engage"):
+        print("-------------------------\n")
+        try:
+            combat.attack_action(table1, users[1].active_character, users[0].active_character)
+
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
+        print("\n-------------------------\n")
 
 
 
@@ -466,50 +583,62 @@ while(command != "exit"):
     #create a quick chat message and add to chatlog
     elif (command == "psst"):
         print("-------------------------\n")
+        try:
+            msg = chat_message.ChatMessage(table1.player_characters[users[0].active_character.object_id], "speech", "public", "Hello World!")
+            table1.put_on_table(msg)
+            table1.chatlog[msg.object_id].print_chat_message()
 
-        msg = chat_message.ChatMessage(table1.player_characters[users[0].active_character.object_id], "speech", "public", "Hello World!")
-        table1.put_on_table(msg)
-        table1.chatlog[msg.object_id].print_chat_message()
+            table1.chatlog[msg.object_id].open_frame()
 
-        table1.chatlog[msg.object_id].open_frame()
-
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
     #create a custom chat message and add to chatlog
     elif (command == "speak"):
         print("-------------------------\n")
+        try:
+            msg = chat_message.ChatMessage(table1.player_characters[users[0].active_character.object_id], "speech", "public", 
+                                           input("Enter your message..."))
+            table1.put_on_table(msg)
+            table1.chatlog[msg.object_id].print_chat_message()
 
-        msg = chat_message.ChatMessage(table1.player_characters[users[0].active_character.object_id], "speech", "public", 
-                                       input("Enter your message..."))
-        table1.put_on_table(msg)
-        table1.chatlog[msg.object_id].print_chat_message()
+            table1.chatlog[msg.object_id].open_frame()
 
-        table1.chatlog[msg.object_id].open_frame()
-
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
 
     #create an action message and add to chatlog
     elif (command == "walk"):
         print("-------------------------\n")
+        try:
+            msg = chat_message.ChatMessage(table1.player_characters[users[0].active_character.object_id], "action", "public", 
+                                           "walks forward " + str(table1.player_characters[users[0].active_character.object_id].speed) + " feet.")
+            table1.put_on_table(msg)
+            table1.chatlog[msg.object_id].print_chat_message()
 
-        msg = chat_message.ChatMessage(table1.player_characters[users[0].active_character.object_id], "action", "public", 
-                                       "walks forward " + str(table1.player_characters[users[0].active_character.object_id].speed) + " feet.")
-        table1.put_on_table(msg)
-        table1.chatlog[msg.object_id].print_chat_message()
+            table1.chatlog[msg.object_id].open_frame()
 
-        table1.chatlog[msg.object_id].open_frame()
-
-
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
 
     #clear the chatlog and storylog, used only for debugging
     elif (command == "clearlogs"):
         print("-------------------------\n")
-        table1.chatlog = {}
-        table1.story_items = {}
-        print("Table logs cleared.")
+        try:
+            table1.chatlog = {}
+            table1.story_items = {}
+            print("Table logs cleared.")
+        except Exception as error:
+            print("sandbox: error found at " + str(command) + " command:")
+            print(error)
         print("\n-------------------------\n")
 
 
@@ -524,11 +653,9 @@ while(command != "exit"):
 
 
 #save gamestate for future use
-print("-------------------------\n")
-filename = str(table1.campaign_name.replace(" ", "_"))
-pickler.save_object(table1, filename)
-print("Table Saved!")
-print("\n-------------------------\n")
-
-
-
+if save_state:
+    print("-------------------------\n")
+    filename = str(table1.campaign_name.replace(" ", "_"))
+    pickler.save_object(table1, filename)
+    print("Table Saved!")
+    print("\n-------------------------\n")
