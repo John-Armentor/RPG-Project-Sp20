@@ -38,7 +38,7 @@ print("-------------------------Running sandbox.py-------------------------\n\n"
 
 command = ""
 campaign_title = "The Chronicles of Testing"
-reset = True
+reset = False
 save_state = True
 
 filename = str(campaign_title.replace(" ", "_"))

@@ -73,9 +73,9 @@ def combat(parent_window, f_game_table, f_character):
 
 
     #build frame
-    chatlog_frame = tkinter.LabelFrame(combat_window, text = "Chatlog:", padx = 5, pady = 5,
+    chatlog_frame = tkinter.LabelFrame(combat_window, text = "Chatlog:", padx = 10, pady = 10,
                                        labelanchor = tkinter.NW)
-    chatlog_frame.grid(row = 0, column = 0, rowspan = 6, sticky = tkinter.N)
+    chatlog_frame.grid(row = 0, column = 0, sticky = tkinter.N)
     refresh_chatlog() #keep up to date
 
     for each_message in f_game_table.chatlog.values():
@@ -86,11 +86,11 @@ def combat(parent_window, f_game_table, f_character):
 
     #text entry to create chat message
     chat_entry = tkinter.Entry(combat_window)     #text entry field
-    chat_entry.grid(row = 6, column = 0, sticky = tkinter.N)
+    chat_entry.grid(row = 1, column = 0, sticky = tkinter.N)
 
 
     chat_submit = tkinter.Button(combat_window, text = "Send", command = send_chat_message)
-    chat_submit.grid(row = 7, column = 0, sticky = tkinter.N)
+    chat_submit.grid(row = 2, column = 0, sticky = tkinter.N)
     #end text entry chat message
 
     ##### END CHAT #####
@@ -100,9 +100,9 @@ def combat(parent_window, f_game_table, f_character):
     ##### PLAYER INFO #####
 
     # frame to hold player information
-    player_info_frame = tkinter.LabelFrame(combat_window, text = f_character.name, padx = 5, pady = 5,
+    player_info_frame = tkinter.LabelFrame(combat_window, text = f_character.name, padx = 10, pady = 10,
                                            labelanchor = tkinter.NW)
-    player_info_frame.grid(row = 0, column = 1, rowspan = 2, sticky = tkinter.N)
+    player_info_frame.grid(row = 0, column = 1, sticky = tkinter.N)
 
     #if image exists, load it and pack it
     if(f_character.image_filename != ""):
@@ -168,39 +168,76 @@ def combat(parent_window, f_game_table, f_character):
 
     ##### ACTIONS  #####
 
-    # Temp label to show design for 'actions remaining'
-    actions_remaining_label = tkinter.Label(combat_window, text = "Actions Remaining: 3")
-    actions_remaining_label.grid(row = 2, column = 1)
+    # Dict used to keep track of how many actions the pc and npc's have
+    actions_remaining = {}
+    actions_remaining[f_character.object_id] = 3
+    for each_npc in f_game_table.nonplayer_characters.values():
+        actions_remaining[each_npc.object_id] = 3
+
+    # Frame to hold actions remaining, selectable actions, selectable targets
+    action_frame = tkinter.Frame(combat_window)
+    action_frame.grid(row = 0, column = 2, padx = 10, pady = 10)
+
+    # Label to display how many actions are remaining
+    actions_remaining_label = tkinter.Label(action_frame, text = "Actions Remaining: 3")
+    actions_remaining_label.pack()
 
     # List of possible actions for the player and list of possible targets
     action_list = ["Attack"]
     target_list = []
 
-    # Populate target list from nonplayer_characters dictionary on table
+    target_dict = {}    # Used in perform_action to determine target selection
+
     for each_npc in f_game_table.nonplayer_characters.values():
+        # Populate dict with npc objects
+        target_dict[each_npc.name] = each_npc 
+
+        # Populate list with npc names 
         target_list.append(each_npc.name)
 
     action_var = tkinter.StringVar(value = action_list)
     target_var = tkinter.StringVar(value = target_list)
 
-    # Listboxes used to display available actions and targets
-    action_label = tkinter.Label(combat_window, text = "Actions:")
-    action_label.grid(row = 3, column = 1)
-    action_listbox = tkinter.Listbox(combat_window, height = 1, listvariable = action_var)
-    action_listbox.grid(row = 4, column = 1)
-
-    target_label = tkinter.Label(combat_window, text = "Targets:")
-    target_label.grid(row = 5, column = 1)
-    target_listbox = tkinter.Listbox(combat_window, height = 1, listvariable = target_var)
-    target_listbox.grid(row = 6, column = 1)
+    # Action selection
+    action_selection_frame = tkinter.LabelFrame(action_frame, text = "Actions:")
+    action_selection_frame.pack()
+    action_selection_scroll = tkinter.Scrollbar(action_selection_frame, orient = tkinter.VERTICAL)
+   
+    action_listbox = tkinter.Listbox(action_selection_frame, exportselection = 0,
+                                     listvariable = action_var, yscrollcommand = action_selection_scroll.set,
+                                     height = 1)
+    action_selection_scroll.config(command = action_listbox.yview)
+    action_selection_scroll.pack(side = tkinter.RIGHT, fill = tkinter.Y)
+    action_listbox.pack(side = tkinter.LEFT, fill = tkinter.BOTH, expand = 1)
+    
+    # Target selection
+    target_selection_frame = tkinter.LabelFrame(action_frame, text = "Actions:")
+    target_selection_frame.pack()
+    target_selection_scroll = tkinter.Scrollbar(target_selection_frame, orient = tkinter.VERTICAL)
+   
+    target_listbox = tkinter.Listbox(target_selection_frame, exportselection = 0,
+                                     listvariable = target_var, yscrollcommand = target_selection_scroll.set,
+                                     height = 1)
+    target_selection_scroll.config(command = target_listbox.yview)
+    target_selection_scroll.pack(side = tkinter.RIGHT, fill = tkinter.Y)
+    target_listbox.pack(side = tkinter.LEFT, fill = tkinter.BOTH, expand = 1)
 
     action_var.set(action_list)
     target_var.set(target_list)
 
+    # Function performed when 'Perform Action' button is pressed
+    def perform_action():
+        # Obtain choices from action and target listboxes
+        action = action_listbox.get(tkinter.ACTIVE)
+        target = target_listbox.get(tkinter.ACTIVE)
+
+        # Determines what function to perform according to action listbox selection
+        if action == "Attack":
+            attack_action(f_game_table, f_character, target_dict[target])
+
     # Button to perform selected action
-    perform_action_button = tkinter.Button(combat_window, text = "Perform Action")
-    perform_action_button.grid(row = 7, column = 1, padx = 10, pady = 10,
-                                   sticky = tkinter.N)
+    perform_action_button = tkinter.Button(action_frame, text = "Perform Action", command = perform_action)
+    perform_action_button.pack()
 
     ##### END ACTIONS #####
 
@@ -234,9 +271,9 @@ def combat(parent_window, f_game_table, f_character):
     #end refresh hitpoints
 
     # frame to hold list of targets and target information
-    target_frame = tkinter.LabelFrame(combat_window, text = "Targets:", padx = 5, pady = 5,
+    target_frame = tkinter.LabelFrame(combat_window, text = "Targets:", padx = 10, pady = 10,
                                       labelanchor = tkinter.NW)
-    target_frame.grid(row = 0, column = 2, rowspan = 8, sticky = tkinter.N)
+    target_frame.grid(row = 0, column = 3, sticky = tkinter.N)
 
     # debugging
     #test_label = tkinter.Label(target_frame, text = "This is the target frame")
