@@ -4,6 +4,13 @@
 #Course:    CSC424 - Software Engineering II
 #Prof.:     Dr. A. Louise Perkins
 
+"""
+    This file contain function definitions for commands
+        used to facilitate combat rounds and turns
+"""
+
+import dice
+import chat_message
 import sys
 sys.path.append('./player_character/')
 sys.path.append('./player_character/abilities')
@@ -21,6 +28,7 @@ import chat_message
 import story_item
 import tkinter
 from PIL import Image, ImageTk #image handling for various file types
+
 
 ###################################
 #######   Combat Screen   #########
@@ -195,15 +203,144 @@ def combat(parent_window, f_game_table, f_character):
 
     ##### TARGETS #####
 
+    #refresh npc hitpoints
+    def refresh_npc_hitpoints(npc):
+        for each_label in npc_hitpoint_frame.winfo_children():
+            each_label.destroy()
+        
+        for each_hitbox in npc.max_hitpoints:  
+            hitpoint_string = (str(each_hitbox) + ": " +
+                               str(npc.current_hitpoints[each_hitbox]) +
+                               "/" +
+                               str(npc.max_hitpoints[each_hitbox]) )
+            
+            hitpoint_label = tkinter.Label(hitpoint_frame, text = hitpoint_string)
+            
+            #format to highlight damage
+            if (npc.current_hitpoints[each_hitbox] < 0):
+                hitpoint_label.config(foreground = "red")
+            elif (npc.current_hitpoints[each_hitbox] <
+                npc.max_hitpoints[each_hitbox]):
+                hitpoint_label.config(foreground = "orange")
+
+            hitpoint_label.pack()
+        
+        combat_window.after(250, refresh_npc_hitpoints)   #refresh 4 times per second (250 ms)
+    #end refresh hitpoints
+
     # frame to hold list of targets and target information
     target_frame = tkinter.LabelFrame(combat_window, text = "Targets:", padx = 5, pady = 5,
                                       labelanchor = tkinter.NW)
     target_frame.grid(row = 0, column = 2, rowspan = 8, sticky = tkinter.N)
 
-    # temp label to display target_frame
-    temp_label = tkinter.Label(target_frame, text = "Targets go here")
-    temp_label.pack()
+    # debugging
+    test_label = tkinter.Label(target_frame, text = "This is the target frame")
+    test_label.pack()
 
+    # creates frame and displays information for each npc in tabletop.nonplayer_characters
+    for each_npc in f_game_table.nonplayer_characters.values():
+        npc_frame = tkinter.LabelFrame(target_frame, 
+                                      text = f_game_table.nonplayer_characters[each_npc.object_id].name,
+                                      padx = 5, pady = 5, labelanchor = tkinter.NW)
+        npc_frame.grid(rowspan = 2, sticky = tkinter.N)
+
+        # debugging
+        test_label2 = tkinter.Label(npc_frame, text = "This is the npc frame")
+        test_label2.pack()
+
+        # if image exists, load it and pack it
+        if(f_game_table.nonplayer_characters[each_npc.object_id].image_filename != ""):
+            image = Image.open(f_game_table.nonplayer_characters[each_npc.object_id].image_filename)
+            image.thumbnail((400,400), Image.ANTIALIAS) 
+            tk_image = ImageTk.PhotoImage(image)
+            frame_image = tkinter.Label(npc_frame, image=tk_image)
+            frame_image.image = tk_image
+            frame_image.pack()
+
+
+        # frame to display current HP
+        npc_hitpoint_frame = tkinter.LabelFrame(npc_frame, text = "Hitpoints:", padx = 5, pady = 5,
+                                        labelanchor = tkinter.NW)
+        npc_hitpoint_frame.pack()
+        refresh_npc_hitpoints(f_game_table.nonplayer_characters[each_npc.object_id])
+
+        #get hitpoint maximums from player's character
+        for each_hitbox in f_game_table.nonplayer_characters[each_npc.object_id].max_hitpoints:  
+            hitpoint_string = (str(each_hitbox) + ": " +
+                            str(f_game_table.nonplayer_characters[each_npc.object_id].current_hitpoints[each_hitbox]) +
+                            "/" +
+                            str(f_game_table.nonplayer_characters[each_npc.object_id].max_hitpoints[each_hitbox]) )
+            
+            hitpoint_label = tkinter.Label(npc_hitpoint_frame, text = hitpoint_string)
+            
+            #format to highlight damage
+            if (f_game_table.nonplayer_characters[each_npc.object_id].current_hitpoints[each_hitbox] < 0):
+                hitpoint_label.config(foreground = "red")
+            elif (f_game_table.nonplayer_characters[each_npc.object_id].current_hitpoints[each_hitbox] <
+                f_game_table.nonplayer_characters[each_npc.object_id].max_hitpoints[each_hitbox]):
+                hitpoint_label.config(foreground = "orange")
+
+            hitpoint_label.pack()
 
     combat_window.mainloop()
     # End combat window
+
+
+
+
+
+
+def attack_action(f_table, f_attacker, f_defender, 
+                  f_attacker_skill = "unarmed", f_defender_skill = "unarmed", 
+                  f_attacker_difficulty = "standard", f_defender_difficulty = "standard",
+                  f_attacker_weapon = "unarmed", f_defender_weapon = "unarmed"):
+
+
+    chat_msg = str("attacks " + str(f_defender.first_name) + ". ")
+
+    #initialize parameter of unarmed to character's game item
+    if (f_attacker_weapon == "unarmed"):
+        f_attacker_weapon = f_attacker.unarmed
+    if (f_defender_weapon == "unarmed"):
+        f_defender_weapon = f_defender.unarmed #here would be a defender's shield if they had one.
+
+
+    #attempt opposed combat skill check between attacker and defender
+    try:
+        skill_results = dice.opposed_check(f_table, f_attacker, f_defender, 
+                                           f_attacker_skill, f_attacker_difficulty,
+                                           f_defender_skill, f_defender_difficulty)
+    
+    except Exception as error:
+        print("An error occurred in attack_action when making the skill check:")
+        print(error)
+        print("Parameters:")
+        print(locals(), sep="\n")
+
+    else:
+        if (skill_results[0] == None): #if no-ne succeeds the attack or parry roll
+            print("attack_action: No one succeeded their combat roll.") #debugging
+            chat_msg = chat_msg + "Both failed their combat maneuvers. "
+
+        elif (skill_results[0] == f_attacker): #attacker wins
+            print("attack_action: The attack roll was successful.") #debugging
+            chat_msg = chat_msg + "The attack succeeds! "
+
+            try: #perform attack action
+                f_attacker_weapon.actions["weapon_attack"](f_attacker_weapon, 
+                                                         f_attacker, f_defender,
+                                                         skill_results[1])
+            except Exception as error:
+                print("An error occurred in combat.py > attack_action, " +
+                      "while attempting weapon_attack:")
+                print(error)
+                print("Parameters:")
+                print(locals(), sep="\n")
+
+
+        else: #defender wins
+            print("attack_action: The defender parried.") #debugging
+            chat_msg = chat_msg + str(f_defender.first_name) + " parried the attack!"
+
+    f_table.put_on_table(chat_message.ChatMessage(f_attacker, "action", "public", chat_msg))
+#end attack_action()
