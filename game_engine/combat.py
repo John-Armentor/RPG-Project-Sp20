@@ -4,10 +4,6 @@
 #Course:    CSC424 - Software Engineering II
 #Prof.:     Dr. A. Louise Perkins
 
-"""
-    This file contain function definitions for commands
-        used to facilitate combat rounds and turns
-"""
 
 import dice
 import chat_message
@@ -174,13 +170,13 @@ def combat(parent_window, f_game_table, f_character):
     for each_npc in f_game_table.nonplayer_characters.values():
         actions_remaining[each_npc.object_id] = 3
 
-    # Frame to hold actions remaining, selectable actions, selectable targets
+    # Frame to hold selectable actions, selectable targets
     action_frame = tkinter.Frame(combat_window)
     action_frame.grid(row = 0, column = 2, padx = 10, pady = 10)
 
     # Label to display how many actions are remaining
-    actions_remaining_label = tkinter.Label(action_frame, text = "Actions Remaining: 3")
-    actions_remaining_label.pack()
+    #actions_remaining_label = tkinter.Label(action_frame, text = "Actions Remaining: 3")
+    #actions_remaining_label.pack()
 
     # List of possible actions for the player and list of possible targets
     action_list = ["Attack"]
@@ -233,11 +229,42 @@ def combat(parent_window, f_game_table, f_character):
 
         # Determines what function to perform according to action listbox selection
         if action == "Attack":
-            attack_action(f_game_table, f_character, target_dict[target])
+            if actions_remaining[f_character.object_id] >= 1:
+                attack_action(f_game_table, f_character, target_dict[target])
+                new_value = actions_remaining[f_character.object_id]
+                new_value = new_value - 1
+                actions_remaining[f_character.object_id] = new_value
 
     # Button to perform selected action
-    perform_action_button = tkinter.Button(action_frame, text = "Perform Action", command = perform_action)
+    perform_action_button = tkinter.Button(action_frame, text = "Perform Action", 
+                                           command = perform_action)
     perform_action_button.pack()
+
+    # Refresh actions remaining counter
+    def refresh_actions_remaining():
+        for each_label in actions_remaining_frame.winfo_children():
+            each_label.destroy()
+
+        actions_remaining_label = tkinter.Label(actions_remaining_frame, text = "Actions Remaining:")
+        actions_remaining_label.pack(side = tkinter.LEFT)
+        actions_remaining_counter = tkinter.Label(actions_remaining_frame, 
+                                                  text = str(actions_remaining[f_character.object_id]))
+        actions_remaining_counter.pack(side = tkinter.RIGHT)
+
+        combat_window.after(250, refresh_actions_remaining)   #refresh 4 times per second
+        # End refresh actions remaining
+
+    # Frame to hold actions remaining
+    actions_remaining_frame = tkinter.Frame(combat_window)
+    actions_remaining_frame.grid(row = 1, column = 2, padx = 10, pady = 10)
+    refresh_actions_remaining()
+
+    # Display number of actions remaining for player character
+    actions_remaining_label = tkinter.Label(actions_remaining_frame, text = "Actions Remaining:")
+    actions_remaining_label.pack(side = tkinter.LEFT)
+    actions_remaining_counter = tkinter.Label(actions_remaining_frame, 
+                                              text = str(actions_remaining[f_character.object_id]))
+    actions_remaining_counter.pack(side = tkinter.RIGHT)
 
     ##### END ACTIONS #####
 
@@ -304,7 +331,7 @@ def combat(parent_window, f_game_table, f_character):
         npc_hitpoint_frame = tkinter.LabelFrame(npc_frame, text = "Hitpoints:", padx = 5, pady = 5,
                                         labelanchor = tkinter.NW)
         npc_hitpoint_frame.pack()
-        refresh_npc_hitpoints(f_game_table.nonplayer_characters[each_npc.object_id])
+        refresh_npc_hitpoints(each_npc)
 
         #get hitpoint maximums from player's character
         for each_hitbox in f_game_table.nonplayer_characters[each_npc.object_id].max_hitpoints:  
