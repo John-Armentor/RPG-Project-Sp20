@@ -15,7 +15,7 @@ import skills
 
 
 ###################################
-#### Character Sheet Screen ####
+####  Character Sheet Screen   ####
 ###################################
 def character_sheet(parent_window, f_character):
 

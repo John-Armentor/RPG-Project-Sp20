@@ -8,7 +8,7 @@
 #   from the game state to the local device and
 #   load an object from the local device to the game state.
 #   
-#   It uses picling via the pickle library to implement this.
+#   It uses pickling via the pickle library to implement this.
 
 import pickle
 

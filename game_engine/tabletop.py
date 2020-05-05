@@ -37,7 +37,7 @@ import uuid
 class Tabletop:
     def __init__(self, f_gamemaster, f_campaign_name = "Campaign"):
         self.object_id = uuid.uuid1()
-        self.gamemaster = f_gamemaster     #stores unique identifier of game master (GM)
+        self.gamemaster = f_gamemaster     #stores user object of game master (GM)
         self.campaign_name = f_campaign_name
 
         self.users = {}
@@ -77,10 +77,11 @@ class Tabletop:
     #auto add to table function, determines the class type and stores in proper dictionary
     def put_on_table(self, f_token):
         if f_token.__class__.__name__ == "PlayerCharacter":
-            self.player_characters[f_token.object_id] = f_token
-
-        elif f_token.__class__.__name__ == "NonplayerCharacter":
-            self.nonplayer_characters[f_token.object_id] = f_token
+            #self.player_characters[f_token.object_id] = f_token
+            if f_token.is_npc == False:
+                self.player_characters[f_token.object_id] = f_token
+            else:
+                self.nonplayer_characters[f_token.object_id] = f_token
 
         elif f_token.__class__.__name__ == "GameItem":
             self.game_items[f_token.object_id] = f_token

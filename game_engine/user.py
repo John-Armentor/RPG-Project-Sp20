@@ -16,9 +16,9 @@ import uuid
 
 class User:
     def __init__(self, f_is_gamemaster = False, 
-                 f_character = None): 
+                 f_character = None, f_table = None): 
         self.object_id = uuid.uuid1()
-        self.table = None   #set by tabletop.py put_on_table()
+        self.table = f_table
         self.ip_address = socket.gethostbyname(socket.gethostname())
         self.is_gamemaster = f_is_gamemaster
 
