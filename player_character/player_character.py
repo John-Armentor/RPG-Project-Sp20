@@ -1,6 +1,6 @@
 #Author:        Dylan E. Wheeler
 #Email:         dylan.wheeler@usm.edu
-#Date:          2019 01 30
+#Date:          2020 01 30
 #Course:        CSC424 - Software Engineering II
 #Prof.:         Dr. A. Louise Perkins
 
@@ -28,6 +28,7 @@ import abilities
 sys.path.append('./player_character/skills')
 import skills
 import uuid
+from PIL import Image, ImageTk #image handling for various file types
 
 
 #list of core ability scores
@@ -39,24 +40,28 @@ import uuid
 
 
 import character_creation
+sys.path.append('./game_items')
+import game_item
 
 
 #player character class
 class PlayerCharacter:
 
-    def __init__(self, f_table):
+    def __init__(self, f_table, f_is_npc):
         #demographics
         self.object_id = uuid.uuid1()
         self.table = f_table   #set by tabletop.py put_on_table()
-        self.table.put_on_table(self)
+        self.is_npc = f_is_npc
 
-        self.first_name = "NewGuy"
+        self.first_name = "Etrius"
         self.middle_name = ""
-        self.family_name = "McCharacter"
+        self.family_name = "Kummel"
         self.name = str(self.first_name + " " + self.family_name)
         self.title = ""
+        self.formal_name = str(self.title + " " + self.first_name + " " +
+                               self.middle_name + " " + self.family_name)
 
-        self.image_filename = ""       #stores a system path to a picture
+        self.image_filename = "images/halbred_knight.jpg"       #stores a system path to a picture
         self.description = "A stunning Character."
 
 
@@ -107,6 +112,11 @@ class PlayerCharacter:
         #inventory
         self.inventory = {}
 
+        #unarmed attack as a game_item
+        self.unarmed = game_item.GameItem()
+        self.unarmed.load_item_from_file(open("./game_items/fist.gmitm"))
+
+        self.table.put_on_table(self)
     #end initializer
 
 
@@ -150,6 +160,24 @@ class PlayerCharacter:
         tkinter_frame.pack()
 
         frame_window.mainloop()
+    #
+
+
+
+   #update name
+    def update_name(self, f_first = "", f_last = "", f_middle = "", f_title = ""):
+        self.first_name = f_first
+        self.middle_name = f_middle
+        self.family_name = f_last
+        self.name = str(self.first_name + " " + self.family_name)
+        self.title = f_title
+        self.formal_name = str(self.title + " " + self.first_name + " " +
+                               self.middle_name + " " + self.family_name)
+    #
+
+    #update desc
+    def update_desc(self, f_desc = ""):
+        self.description = f_desc
     #
 
 

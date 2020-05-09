@@ -15,15 +15,15 @@ import skills
 
 
 ###################################
-#### Character Sheet Screen ####
+####  Character Sheet Screen   ####
 ###################################
-def character_sheet(f_character):
+def character_sheet(parent_window, f_character):
 
     print("Character Sheet:")
     print()
     
     # tkinter window for GUI character sheet
-    character_sheet_window = tkinter.Tk()           
+    character_sheet_window = tkinter.Toplevel(parent_window)           
     character_sheet_window.title("Character Sheet")
 
     ############ Player Information ############
@@ -75,7 +75,7 @@ def character_sheet(f_character):
             hitpoint_label.pack()
 
 
-    # Displays the character's currently wielded items
+    # Displays the character's currently wielded items 
     wielded_item_frame = tkinter.LabelFrame(character_sheet_window, text = "Wielded Items",
                                             labelanchor = tkinter.N)
     wielded_item_frame.grid(row = 0, column = 2, sticky = tkinter.N, padx = 5, pady = 5)
@@ -87,7 +87,7 @@ def character_sheet(f_character):
             item_label.pack()
 
 
-    # Function for inventory button, opens a window that displays the player's current inventory
+    # Function for inventory_button, opens a window that displays the player's current inventory
     def view_inventory():
         inventory_window = tkinter.Tk()           
         inventory_window.title("Inventory")
@@ -104,17 +104,18 @@ def character_sheet(f_character):
     # Button to enable the player to view their inventory
     inventory_button = tkinter.Button(character_sheet_window, text = "Inventory",
                                       command = view_inventory)
-    inventory_button.grid(row = 1, column = 2, padx = 10, pady = 10)
+    inventory_button.grid(row = 0, column = 3, padx = 10, pady = 10)
 
 
     # Function for character creation button, opens the character creation window
     def enter_character_creation():
-        character_creation.character_creation(f_character)
+        character_creation.character_creation(character_sheet_window, f_character)
 
     # Button to enable the player to create a character
     character_creation_button = tkinter.Button(character_sheet_window, text = "Create a Character",
                                                command = enter_character_creation)
-    character_creation_button.grid(row = 2, column = 2, padx = 10, pady = 10)
+    character_creation_button.grid(row = 1, column = 3, padx = 10, pady = 10)
+
 
 
 

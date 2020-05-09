@@ -1,7 +1,7 @@
 #Author:    John P Armentor
 #email:     johnparmentor@gmail.com
 #Date:      2020 01 30
-#Modified:  2020 03 09
+#Modified:  2020 03 29
 #Course:    CSC425 - Software Engineering II
 #Prof:      Dr. A. Louise Perkins
 
@@ -92,8 +92,9 @@ def main():
     
     client_user = user.User(False, player_character.PlayerCharacter(host_table))
     host_table.put_on_table(client_user)
-            
-    main_window = main_menu.MainMenu(host_table, client_user)
-    main_window.mainloop()
+        
+    while True:
+        main_window = main_menu.MainMenu(host_table, client_user)
+        main_window.mainloop()
         
 main()
