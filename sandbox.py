@@ -47,10 +47,10 @@ users = []
 if reset:
     gm1 = user.User(True)
     table1 = tabletop.Tabletop(gm1, campaign_title)
-    users.append(user.User(False, player_character.PlayerCharacter(table1), table1))
-    users.append(user.User(False, player_character.PlayerCharacter(table1), table1))
+    users.append(user.User(False, player_character.PlayerCharacter(table1, False), table1))
+    #users.append(user.User(False, player_character.PlayerCharacter(table1, True), table1))
     table1.put_on_table(users[0])
-    table1.put_on_table(users[1])
+    #table1.put_on_table(users[1])
 
 else:
     table1 = pickler.load_object(filename)
@@ -547,7 +547,7 @@ while(command != "exit"):
     elif(command == "npc"):
         print("-------------------------\n")
         try:
-            npc = player_character.PlayerCharacter(table1)
+            npc = player_character.PlayerCharacter(table1, True)
             firstname = input("Enter first name: ")
             lastname = input("Enter last name: ")
             npc.update_name(firstname, lastname)
