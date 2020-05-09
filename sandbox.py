@@ -99,25 +99,24 @@ instructions = ("\n\nsandbox commands:\n" +
                 "printskills:\tview all skills in the skills.gameconfig file\n" +
                 "reloadskills:\tresets the table's default skills\n" +
                 "printabils:\tview all abilities in the abilities.gameconfig file\n" +
-                "table:\tplace the character and a new item on the table and confirm\n" +
+                #"table:\tplace the character and a new item on the table and confirm\n" +
                 "printtable:\tprint the object ids of al objects on the table\n" +
                 "savetable:\tsaves the table to a local file\n" +
                 "loadtable:\tloads the table from a local file\n" +
                 "main:\topen the main game window\n" +
 
-                "\n----- Dice Commands -----\n" +
-                "roll:\tmake a quick dice check (non-skill based)\n" +
-                "dicetower:\troll a ton of dice for fun\n" +
-                "skillcheck:\tmake a skill check\n" +
+                #"\n----- Dice Commands -----\n" +
+                #"roll:\tmake a quick dice check (non-skill based)\n" +
+                #"dicetower:\troll a ton of dice for fun\n" +
+                #"skillcheck:\tmake a skill check\n" +
                 #"opposed:\troll a skill check between two opposing characters\n" +
 
                 "\n----- Combat Commands -----\n" +
                 "thwack:\tattack the PC (uses take_damage, not weapon_attack)\n" +
                 "chug:\tdrink a healing potion\n" +
                 "npc:\tadd an NPC to the table (updates users[1])\n" +
-                "engage:\tuse combat.py > attack_action to roll combat between user[0] and an npc\n" + 
-
-                "combat:\topen the combat window\n" +
+                #"engage:\tuse combat.py > attack_action to roll combat between user[0] and an npc\n" + 
+                #"combat:\topen the combat window\n" +
 
 
                 "\n----- Chatlog -----\n" +
