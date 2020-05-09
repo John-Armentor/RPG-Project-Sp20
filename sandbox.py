@@ -109,7 +109,7 @@ instructions = ("\n\nsandbox commands:\n" +
                 "roll:\tmake a quick dice check (non-skill based)\n" +
                 "dicetower:\troll a ton of dice for fun\n" +
                 "skillcheck:\tmake a skill check\n" +
-                "opposed:\troll a skill check between two opposing characters\n" +
+                #"opposed:\troll a skill check between two opposing characters\n" +
 
                 "\n----- Combat Commands -----\n" +
                 "thwack:\tattack the PC (uses take_damage, not weapon_attack)\n" +
