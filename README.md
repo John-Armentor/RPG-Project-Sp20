@@ -1,3 +1,35 @@
+[chatquest RPG]
+
+--team members--
+John Armentor
+Dylan E. Wheeler
+Jacob Horst
+
+--Requirements--
+Python 3.5.1+
+
+--Installation--
+In the current iteration there will be no installation process needed with how Python code can be run via the console or double-clicking the files outlined in the below run guide.
+
+--Run Guide--
+In the current iteration of the game, the features can be accessed by running 'sandbox.py' via the console by navigating to the directory.  This will give an overview and access to the features of the game.  When going back, sandbox will always be accessible for feature testing, but to access past client/server interactions at previous commit stages via Github, it will be necessary to run the server.py file first on the host machine, and then the client.py file on each of the player machines.  A notable exception is when the server launch was integrated into the client build, but this will be clearly made for the few relevant commits via a prompt when launching the client.
+
+--Overview--
+chatquest RPG is a game tool that is designed to provide a tabletop gaming experience to PC users.  With a focus on classic Dungeons and Dragons experiences, chatquest makes use of the Mythras tabletop rpg system and ruleset (http://thedesignmechanism.com/) which brings a unique tabletop experience to the users can is simple and intuitive, yet has a wealth of depth that can allow for a lifetime of unique experiences in the hands of those with a creative drive and a passion for the tabletop experience.
+
+--Development Process and Final Project Overview--
+https://youtu.be/cwaHcs5wBIU
+
+--Repository--
+https://github.com/John-Armentor/RPG-Project-Sp20
+
+--Project flow and history--
+https://github.com/John-Armentor/RPG-Project-Sp20/commits/master
+
+This is our flow of commits into our current version of the product and will allow for a history of the step-by-step development process and previous versions to be accessed.
+
+----
+
 Within our team our development process is as follows:
 
 --BackLog--
