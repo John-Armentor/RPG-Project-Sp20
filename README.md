@@ -1,8 +1,8 @@
 [chatquest RPG]
 
 --team members--
-John Armentor
-Dylan E. Wheeler
+John Armentor ||
+Dylan E. Wheeler ||
 Jacob Horst
 
 --Requirements--
